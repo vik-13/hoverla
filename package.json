@@ -1,0 +1,34 @@
+{
+  "name": "go-climb",
+  "version": "0.0.1",
+  "description": "A little game...",
+  "main": "index.html",
+  "scripts": {
+    "start": "gulp",
+    "serve": "gulp serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "climbing, go climb, game"
+  ],
+  "author": "Viktor Uhryn",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "devDependencies": {
+    "browser-sync": "2.24.6",
+    "del": "3.0.0",
+    "gulp": "3.9.1",
+    "gulp-concat": "2.6.1",
+    "gulp-inject": "4.3.2",
+    "gulp-size": "3.0.0",
+    "gulp-uglifyes": "0.1.3",
+    "gulp-watch": "5.0.1",
+    "gulp-zip": "4.2.0"
+  }
+}
