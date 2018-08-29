@@ -7,9 +7,15 @@ window.scene =(() => {
 		i: () => {
 			campfire = new Campfire();
 			tree = new Tree();
+			mountain.i();
+			character.i();
 		},
 		n: () => {
 			campfire.n();
+			character.n();
+			mountain.n();
+
+			camera.n(character.getPosition());
 		},
 		r: () => {
 			// let bg = c.createLinearGradient(0, 0, 0, gc.res.y);
@@ -21,7 +27,15 @@ window.scene =(() => {
 
 			// tree.r();
 			// ball.r();
-			campfire.r();
+			// campfire.r();
+
+			c.save();
+			c.translate(camera.getPosition().x, camera.getPosition().y);
+
+			mountain.r();
+			character.r();
+
+			c.restore();
 		}
 	};
 })();

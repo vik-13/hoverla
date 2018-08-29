@@ -1,5 +1,5 @@
-function Anim(g, a) {
-	const SPEED = 1000;
+function Anim(g, a, s) {
+	const SPEED = s || 200;
 	const TOTAL = a.length + 1;
 	const SLIDES = [];
 

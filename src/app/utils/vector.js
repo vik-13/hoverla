@@ -10,7 +10,10 @@ function Vector(x, y) {
 
 	this.angle = (vector) => {
 		return (typeof vector === 'undefined') ? Math.atan2(this.y, this.x) :
-			Math.atan2(vector.y, vector.x) - Math.atan2(this.y, this.x);
+			Math.atan2(vector.y - this.y, vector.x - this.x);
+
+		// return (typeof vector === 'undefined') ? Math.atan2(this.y, this.x) :
+		// 	Math.atan2(vector.y, vector.x) - Math.atan2(this.y, this.x);
 	};
 
 	this.apply = (vector) => {
@@ -77,4 +80,8 @@ function Vector(x, y) {
 	this.normal = (vector) => {
 		return new Vector(this.x - vector.x, this.y - vector.y).perpendicular().normalize();
 	};
+
+	this.center = (vector) => {
+		return new Vector(this.x + (vector.x - this.x) / 2, this.y + (vector.y - this.y) / 2);
+	}
 }
