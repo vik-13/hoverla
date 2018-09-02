@@ -1,4 +1,4 @@
-function Anim(g, a, s) {
+function Anim(g, a, s, f) {
 	const SPEED = s || 200;
 	const TOTAL = a.length + 1;
 	const SLIDES = [];
@@ -8,6 +8,7 @@ function Anim(g, a, s) {
 	let tt = 0;
   let last = +new Date();
   let diff = last;
+  let isFinished = false;
 
 	SLIDES.push(g);
 
@@ -25,11 +26,14 @@ function Anim(g, a, s) {
     diff = +new Date() - last;
 		t += diff;
 		index = Math.floor((t % (TOTAL * SPEED)) / SPEED);
-		const nextIndex = index + 1 === TOTAL ? 0 : index + 1;
+		if (index + 1 === TOTAL) {
+			isFinished = true;
+		}
+		const nextIndex = index + 1 === TOTAL ? f ? index : 0 : index + 1;
 		tt = (t % (TOTAL * SPEED)) % SPEED;
 
 		last = +new Date();
-		return SLIDES[index].map((slide, i) => {
+		return (f && isFinished) ? SLIDES[TOTAL - 1] : SLIDES[index].map((slide, i) => {
 		  return slide.map((item, ii) => {
 		    if (!ii) {
 		      return item.map((item2, iii) => {

@@ -20,7 +20,7 @@
 		window.m = c.moveTo.bind(c);
 		window.bp = c.beginPath.bind(c);
 		window.cp = c.closePath.bind(c);
-		gc.gravity = new Vector(0, .8);
+		gc.gravity = new Vector(0, -.8);
 
 		resize();
 
@@ -32,7 +32,16 @@
 			gc.keys.l = e.keyCode === 65 ? true : gc.keys.l;
 			gc.keys.r = e.keyCode === 68 ? true : gc.keys.r;
 			gc.keys.d = e.keyCode === 83 ? true : gc.keys.d;
-			gc.keys.u = e.keyCode === 87 ? true : gc.keys.u;
+			// gc.keys.u = e.keyCode === 87 ? true : gc.keys.u;
+			gc.keys.u = e.keyCode === 32 ? true : gc.keys.u;
+		});
+
+		window.addEventListener('keyup', (e) => {
+			gc.keys.l = e.keyCode === 65 ? false : gc.keys.l;
+			gc.keys.r = e.keyCode === 68 ? false : gc.keys.r;
+			gc.keys.d = e.keyCode === 83 ? false : gc.keys.d;
+			// gc.keys.u = e.keyCode === 87 ? false : gc.keys.u;
+			gc.keys.u = e.keyCode === 32 ? false : gc.keys.u;
 		});
 	}
 

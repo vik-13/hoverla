@@ -9,6 +9,7 @@ window.scene =(() => {
 			tree = new Tree();
 			mountain.i();
 			character.i();
+			bushes.i();
 		},
 		n: () => {
 			campfire.n();
@@ -25,15 +26,17 @@ window.scene =(() => {
 			c.fillStyle = '#000000';
 			c.fillRect(0, 0, gc.res.x, gc.res.y);
 
-			// tree.r();
-			// ball.r();
-			// campfire.r();
-
 			c.save();
 			c.translate(camera.getPosition().x, camera.getPosition().y);
 
 			mountain.r();
+
+			campfire.r();
+
 			character.r();
+
+			bushes.r();
+			tree.r();
 
 			c.restore();
 		}

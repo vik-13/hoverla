@@ -1,5 +1,5 @@
 window.mountain = (() => {
-	const MIN_LENGTH = 100;
+	const MIN_LENGTH = 50;
 	const MAX_DISTORTION = .1;
 	const trip = [];
 	const CAMPS = [
@@ -31,11 +31,15 @@ window.mountain = (() => {
 						n: [{
 							type: 'empty',
 							start: path.start.get(),
-							end: point.get()
+							end: point.get(),
+							angle: path.start.get().angle(point.get()),
+							direction: point.get().sub(path.start.get()).normalize()
 						}, {
 							type: 'empty',
 							start: point.get(),
-							end: path.end.get()
+							end: path.end.get(),
+							angle: point.get().angle(path.end.get()),
+							direction: path.end.get().sub(path.start.get()).normalize()
 						}]
 					});
 				}
@@ -56,7 +60,9 @@ window.mountain = (() => {
 			trip.push({
 				type: 'camp',
 				start: new Vector(camp[0], camp[1]),
-				end: new Vector(camp[0] + camp[2], camp[1])
+				end: new Vector(camp[0] + camp[2], camp[1]),
+				angle: 0,
+				direction: new Vector(1, 0)
 			});
 
 			trip.push({
@@ -75,6 +81,11 @@ window.mountain = (() => {
 		while (isPatching) {
 			isPatching = patch();
 		}
+		console.log(trip);
+	}
+
+	function search(x) {
+		return trip.filter((path) => path.start.x <= x && path.end.x > x);
 	}
 
 	return {
@@ -88,45 +99,53 @@ window.mountain = (() => {
 			const cameraPosition = camera.getPosition();
 			c.save();
 			c.translate(0, gc.res.y);
-			const filteredMap = trip.filter((path) => path.end.x >= (-cameraPosition.x - 200) && path.start.x <= -cameraPosition.x + gc.res.x + 200);
+			// c.scale(0.025, 0.025);
+			// const filteredMap = trip.filter((path) => path.end.x >= (-cameraPosition.x - 200) && path.start.x <= -cameraPosition.x + gc.res.x + 200);
+			const gradient = c.createLinearGradient(20000, 0, 20000, -20000);
+			gradient.addColorStop(0, 'hsl(87, 39%, 36%)');
+			gradient.addColorStop(4000 / 20000, 'hsl(40, 39%, 36%)');
+			gradient.addColorStop(10000 / 20000, 'hsl(181, 39%, 87%)');
+			gradient.addColorStop(18000 / 20000, 'hsl(181, 79%, 85%)');
+			gradient.addColorStop(1, 'hsl(181, 79%, 100%)');
+			// c.fillStyle = 'hsl(87, 39%, 36%)';
+			c.fillStyle = gradient;
 			bp();
-			c.fillStyle = 'darkgreen';
-			filteredMap.forEach((path, index) => {
+			trip.forEach((path, index) => {
 				if (!index) {
 					m(path.start.x, -path.start.y);
 					l(path.end.x, -path.end.y);
-				} else if (index === filteredMap.length - 1) {
-					l(path.start.x, -filteredMap[0].start.y + 200);
-					l(filteredMap[0].start.x, -filteredMap[0].start.y + 200);
-					l(filteredMap[0].start.x, -filteredMap[0].start.y);
+				} else if (index === trip.length - 1) {
+					l(path.start.x, -trip[0].start.y + 200);
+					l(trip[0].start.x, -trip[0].start.y + 200);
+					l(trip[0].start.x, -trip[0].start.y);
 				} else {
 					l(path.end.x, -path.end.y);
 				}
 			});
 			c.fill();
 			cp();
-
-			// filteredMap.forEach((path) => {
-			// 	if (path.type === 'empty') {
-			// 		bp();
-			// 		c.strokeStyle = 'brown';
-			// 		m(path.start.x, -path.start.y);
-			// 		l(path.end.x, -path.end.y);
-			// 		c.stroke();
-			// 	} else if (path.type === 'camp') {
-			// 		bp();
-			// 		c.strokeStyle = 'brown';
-			// 		m(path.start.x, -path.start.y);
-			// 		l(path.end.x, -path.end.y);
-			// 		c.stroke();
-			// 		cp();
-			// 	}
-			// });
 			c.restore();
 		},
 		getBlock: (p) => {
-			const filteredMap = trip.filter((path) => path.start.x <= p.x && path.end.x > p.x);
-			return filteredMap[0] || false;
+			return search(p.x)[0];
+		},
+		getHeight: (x) => {
+			const filteredMap = search(x);
+			if (filteredMap[0]) {
+				let diffX = (x - filteredMap[0].start.x) / (filteredMap[0].end.x - filteredMap[0].start.x);
+				let diffY = filteredMap[0].start.y + ((filteredMap[0].end.y - filteredMap[0].start.y) * diffX);
+				return diffY;
+			} else {
+				return -1;
+			}
+		},
+		getAngle: (x) => {
+			const filteredMap = search(x);
+			return filteredMap[0] ? filteredMap[0].angle : 0;
+		},
+		getDirection: (x) => {
+			const filteredMap = search(x);
+			return filteredMap[0] ? filteredMap[0].direction.get() : new Vector();
 		}
 	};
 })();
