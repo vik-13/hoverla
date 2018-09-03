@@ -4,11 +4,9 @@
 
 	window.gc = {
 		res: {x: 1280, y: 720},
-		keys: {
-			l: false,
-			r: false,
-			u: false,
-			d: false
+		interaction: {
+			touched: false,
+			position: new Vector()
 		}
 	};
 
@@ -28,20 +26,8 @@
 
 		live();
 
-		window.addEventListener('keydown', (e) => {
-			gc.keys.l = e.keyCode === 65 ? true : gc.keys.l;
-			gc.keys.r = e.keyCode === 68 ? true : gc.keys.r;
-			gc.keys.d = e.keyCode === 83 ? true : gc.keys.d;
-			// gc.keys.u = e.keyCode === 87 ? true : gc.keys.u;
-			gc.keys.u = e.keyCode === 32 ? true : gc.keys.u;
-		});
-
-		window.addEventListener('keyup', (e) => {
-			gc.keys.l = e.keyCode === 65 ? false : gc.keys.l;
-			gc.keys.r = e.keyCode === 68 ? false : gc.keys.r;
-			gc.keys.d = e.keyCode === 83 ? false : gc.keys.d;
-			// gc.keys.u = e.keyCode === 87 ? false : gc.keys.u;
-			gc.keys.u = e.keyCode === 32 ? false : gc.keys.u;
+		gc.canvas.addEventListener('click', (e) => {
+			scene.interaction(e.offsetX, e.offsetY);
 		});
 	}
 
@@ -78,4 +64,5 @@
 	}
 
 	window.onload = init;
+	window.onresize = resize;
 })();

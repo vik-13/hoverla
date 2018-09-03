@@ -4,6 +4,9 @@ window.scene =(() => {
 	let campfire;
 
 	return {
+		interaction: (x, y) => {
+			barricades.add(x, y);
+		},
 		i: () => {
 			campfire = new Campfire();
 			tree = new Tree();

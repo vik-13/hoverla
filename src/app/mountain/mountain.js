@@ -1,6 +1,6 @@
 window.mountain = (() => {
-	const MIN_LENGTH = 50;
-	const MAX_DISTORTION = .1;
+	const MIN_LENGTH = 100;
+	const MAX_DISTORTION = .08;
 	const trip = [];
 	const CAMPS = [
 		[0, 0, 1000],
@@ -73,6 +73,23 @@ window.mountain = (() => {
 		});
 	}
 
+	function defineHoles() {
+		let lastHolePassed = 0;
+		trip.map((path) => {
+			if (path.type === 'empty' && path.start.x < 36000) {
+				if (lastHolePassed > 1 && rFloat(0, 1) <= .1) {
+					path.type = 'hole';
+					lastHolePassed = 0;
+				} else {
+					lastHolePassed++;
+				}
+				return path;
+			} else {
+				return path;
+			}
+		});
+	}
+
 	function generate() {
 		defineCamps();
 
@@ -81,6 +98,9 @@ window.mountain = (() => {
 		while (isPatching) {
 			isPatching = patch();
 		}
+
+		defineHoles();
+
 		console.log(trip);
 	}
 
@@ -109,21 +129,32 @@ window.mountain = (() => {
 			gradient.addColorStop(1, 'hsl(181, 79%, 100%)');
 			// c.fillStyle = 'hsl(87, 39%, 36%)';
 			c.fillStyle = gradient;
-			bp();
-			trip.forEach((path, index) => {
-				if (!index) {
-					m(path.start.x, -path.start.y);
-					l(path.end.x, -path.end.y);
-				} else if (index === trip.length - 1) {
-					l(path.start.x, -trip[0].start.y + 200);
-					l(trip[0].start.x, -trip[0].start.y + 200);
-					l(trip[0].start.x, -trip[0].start.y);
-				} else {
-					l(path.end.x, -path.end.y);
+			let index = 0;
+			while (index < trip.length) {
+				let startX = 0;
+				let startY = 0;
+				let isFinished = false;
+				let isFirst = true;
+				bp();
+				while (!isFinished) {
+					if (isFirst) {
+						startX = trip[index].start.x;
+						startY = trip[index].start.y;
+						m(trip[index].start.x, -trip[index].start.y);
+					}
+					if (trip[index].type === 'hole' || index === trip.length - 1) {
+						l(trip[index].type === 'hole' ? trip[index].start.x : trip[index].end.x, gc.res.y + 400);
+						l(startX, gc.res.y + 400);
+						c.fill();
+						cp();
+						isFinished = true;
+					} else {
+						l(trip[index].end.x, -trip[index].end.y);
+					}
+					isFirst = false;
+					index++;
 				}
-			});
-			c.fill();
-			cp();
+			}
 			c.restore();
 		},
 		getBlock: (p) => {
