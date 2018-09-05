@@ -4,22 +4,33 @@ window.scene =(() => {
 	let campfire;
 
 	return {
-		interaction: (x, y) => {
-			barricades.add(x, y);
+		interaction: (mousePosition) => {
+			barricades.add(mousePosition);
+			character.interaction(mousePosition);
 		},
 		i: () => {
+			camera.i();
 			campfire = new Campfire();
 			tree = new Tree();
 			mountain.i();
 			character.i();
+			avalanche.i();
+
 			bushes.i();
+			barricades.i();
 		},
 		n: () => {
-			campfire.n();
-			character.n();
-			mountain.n();
+			if (!character.isDead()) {
+				// campfire.n();
+				character.n();
+				mountain.n();
 
-			camera.n(character.getPosition());
+				avalanche.n();
+				//
+				barricades.n();
+
+				camera.n(character.getPosition());
+			}
 		},
 		r: () => {
 			// let bg = c.createLinearGradient(0, 0, 0, gc.res.y);
@@ -34,12 +45,16 @@ window.scene =(() => {
 
 			mountain.r();
 
-			campfire.r();
+			// campfire.r();
 
 			character.r();
 
-			bushes.r();
-			tree.r();
+			avalanche.r();
+
+			barricades.r();
+
+			// bushes.r();
+			// tree.r();
 
 			c.restore();
 		}

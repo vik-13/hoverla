@@ -1,6 +1,10 @@
 window.draw = (() => {
 	return {
-		r: (g) => {
+		r: (g, size) => {
+			c.save();
+			if (size) {
+				c.translate(-size[0] / 2, -size[1] / 2);
+			}
 			g.forEach((p) => {
 				bp();
 				c.fillStyle = p[2] || 'transparent';
@@ -13,6 +17,7 @@ window.draw = (() => {
 				c.stroke();
 				p[3] && c.fill();
 			});
+			c.restore();
 		}
 	};
 })();

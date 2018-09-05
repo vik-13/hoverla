@@ -7,7 +7,9 @@
 		interaction: {
 			touched: false,
 			position: new Vector()
-		}
+		},
+		start: +new Date(),
+		last: +new Date()
 	};
 
 	function init() {
@@ -27,16 +29,16 @@
 		live();
 
 		gc.canvas.addEventListener('click', (e) => {
-			scene.interaction(e.offsetX, e.offsetY);
+			scene.interaction(new Vector(e.offsetX, e.offsetY).div(gc.originalRatio));
 		});
 	}
 
 	function resize() {
 		gc.size = {x: window.innerWidth, y: window.innerHeight};
-		gc.ratio = Math.min(gc.size.x / gc.res.x, gc.size.y / gc.res.y);
-		gc.canvas.style.width = Math.round(gc.res.x * gc.ratio) + 'px';
-		gc.canvas.style.height = Math.round(gc.res.y * gc.ratio) + 'px';
-		gc.ratio = gc.ratio * (window.devicePixelRatio || 1);
+		gc.originalRatio = Math.min(gc.size.x / gc.res.x, gc.size.y / gc.res.y);
+		gc.canvas.style.width = Math.round(gc.res.x * gc.originalRatio) + 'px';
+		gc.canvas.style.height = Math.round(gc.res.y * gc.originalRatio) + 'px';
+		gc.ratio = gc.originalRatio * (window.devicePixelRatio || 1);
 
 		changeCanvasSize();
 	}

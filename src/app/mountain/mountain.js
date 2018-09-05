@@ -4,10 +4,14 @@ window.mountain = (() => {
 	const trip = [];
 	const CAMPS = [
 		[0, 0, 1000],
-		[8000, 4000, 800],
-		[24000, 10000, 800],
-		[36000, 18000, 600],
+		[8000, 3000, 800],
+		[24000, 6500, 800],
+		[36000, 10500, 600],
 	];
+	const FINAL = [44000, 10000];
+	const HIGH = 12500;
+	const LENGTH = 40000;
+	let gradient;
 
 	function patch() {
 		const toBeAdded = [];
@@ -55,7 +59,7 @@ window.mountain = (() => {
 
 	function defineCamps() {
 		CAMPS.forEach((camp, index) => {
-			const next = CAMPS[index + 1] || [40000, 20000];
+			const next = CAMPS[index + 1] || [LENGTH, HIGH];
 
 			trip.push({
 				type: 'camp',
@@ -73,25 +77,32 @@ window.mountain = (() => {
 		});
 	}
 
+	function defineFinal() {
+		trip.push({
+			type: 'empty',
+			start: new Vector(LENGTH, HIGH),
+			end: new Vector(FINAL[0], FINAL[1])
+		});
+	}
+
 	function defineHoles() {
-		let lastHolePassed = 0;
+		let lastHolePassed = -1;
 		trip.map((path) => {
-			if (path.type === 'empty' && path.start.x < 36000) {
-				if (lastHolePassed > 1 && rFloat(0, 1) <= .1) {
+			if (path.type === 'empty' && path.start.x > 3000 && path.start.x < CAMPS[3][0]) {
+				if (lastHolePassed > 1 && rFloat(0, 1) <= .1 + (.9 * (lastHolePassed / 100))) {
 					path.type = 'hole';
-					lastHolePassed = 0;
-				} else {
-					lastHolePassed++;
+					lastHolePassed = -1;
 				}
-				return path;
-			} else {
-				return path;
+				lastHolePassed++;
 			}
+			return path;
 		});
 	}
 
 	function generate() {
 		defineCamps();
+
+		defineFinal();
 
 		let isPatching = true;
 
@@ -100,6 +111,11 @@ window.mountain = (() => {
 		}
 
 		defineHoles();
+
+		trip.map((item, index) => {
+			item.id = index;
+			return item;
+		});
 
 		console.log(trip);
 	}
@@ -111,6 +127,12 @@ window.mountain = (() => {
 	return {
 		i: () => {
 			generate();
+			gradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
+			gradient.addColorStop(0, 'hsl(87, 39%, 36%)');
+			gradient.addColorStop(CAMPS[1][1] / HIGH, 'hsl(40, 39%, 36%)');
+			gradient.addColorStop(CAMPS[2][1] / HIGH, 'hsl(181, 79%, 100%)');
+			gradient.addColorStop(CAMPS[3][1] / HIGH, 'hsl(181, 79%, 100%)');
+			gradient.addColorStop(1, 'hsl(181, 79%, 85%)');
 		},
 		n: () => {
 
@@ -119,15 +141,7 @@ window.mountain = (() => {
 			const cameraPosition = camera.getPosition();
 			c.save();
 			c.translate(0, gc.res.y);
-			// c.scale(0.025, 0.025);
-			// const filteredMap = trip.filter((path) => path.end.x >= (-cameraPosition.x - 200) && path.start.x <= -cameraPosition.x + gc.res.x + 200);
-			const gradient = c.createLinearGradient(20000, 0, 20000, -20000);
-			gradient.addColorStop(0, 'hsl(87, 39%, 36%)');
-			gradient.addColorStop(4000 / 20000, 'hsl(40, 39%, 36%)');
-			gradient.addColorStop(10000 / 20000, 'hsl(181, 39%, 87%)');
-			gradient.addColorStop(18000 / 20000, 'hsl(181, 79%, 85%)');
-			gradient.addColorStop(1, 'hsl(181, 79%, 100%)');
-			// c.fillStyle = 'hsl(87, 39%, 36%)';
+			// c.scale(0.027, 0.027);
 			c.fillStyle = gradient;
 			let index = 0;
 			while (index < trip.length) {
@@ -157,8 +171,12 @@ window.mountain = (() => {
 			}
 			c.restore();
 		},
-		getBlock: (p) => {
-			return search(p.x)[0];
+		getBlock: (x) => {
+			return search(x)[0];
+		},
+		isHole: (x) => {
+			const filteredMap = search(x);
+			return filteredMap[0] ? filteredMap[0].type === 'hole' : false;
 		},
 		getHeight: (x) => {
 			const filteredMap = search(x);
