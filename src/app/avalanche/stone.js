@@ -1,14 +1,21 @@
 function Stone() {
-	let active = true;
-	let radius = 10;
-	const MASS = 1;
+	const size = [53, 51];
+	const anim = new Anim(
+		[[[0,20,12,3,25,17,16,29],"","#635f62",1],[[25,17,38,0,54,18,45,23],"","#635f62",1],[[45,23,26,40,22,51,48,42],"","#635f62",1],[[25,17,16,28,27,40,46,23],"","#a3a2a5",1],[[25,17,12,2,38,0],"","#697375",1],[[17,29,0,20,0,36,22,51,27,40],"","#697375",1],[[45,22,54,18,48,42],"","#687676",1]],
+		[],
+		200
+	);
+	let angle = 0;
+	let aAcceleration = .01;
+	let radius = 25;
+	const MASS = .3;
 	const SPEED_LIMIT = 10;
 	const height = mountain.getHeight(gc.res.x - camera.getPosition().x);
 	const position = new Vector(gc.res.x - camera.getPosition().x, height);
 	let velocity = new Vector(-2, 2);
 
 	const death = {
-		DYING_TIME: 2000,
+		DYING_TIME: 1000,
 		type: 0,
 		dead: false,
 		dying: false,
@@ -18,17 +25,15 @@ function Stone() {
 	function collision() {
 		const block = mountain.getBlock(position.x);
 		const height = mountain.getHeight(position.x);
-		const hillAngle = block.start.get().angle(block.end);
-		const hillDirection = block.end.get().sub(block.start).normalize().mult(.3);
 		const normal = block.end.get().normal(block.start);
-		const angle = normal.angle(velocity.get().normalize());
 
-		if (position.y <= height) {
+		if (position.y - 10 <= height) {
 			if (block.type === 'hole') {
 				die(1);
 			} else {
-				position.y = height;
+				position.y = height + 10;
 				const reflection = velocity.get().sub(normal.get().mult(velocity.get().dot(normal)));
+				aAcceleration = (velocity.mag() / (2 * radius * Math.PI)) * (2 * Math.PI);
 				velocity.apply(reflection);
 			}
 		}
@@ -65,7 +70,7 @@ function Stone() {
 
 	this.n = () => {
 		if (!death.dying) {
-			let acc = velocity.get().normalize().mult(-0.001);
+			let acc = velocity.get().normalize().mult(-0.017);
 			acc.add(gc.gravity.get().mult(MASS));
 
 			velocity.add(acc);
@@ -87,16 +92,16 @@ function Stone() {
 
 		}
 		checkDying();
+
+		aAcceleration = aAcceleration <= 0 ? 0 : aAcceleration - .001;
+		angle -= aAcceleration;
 	};
 
 	this.r = () => {
 		c.save();
 		c.translate(position.x, gc.res.y - position.y);
-		c.fillStyle = 'white';
-		bp();
-		c.arc(0, 0, 10, 0, Math.PI * 2);
-		cp();
-		c.fill();
+		c.rotate(angle);
+		draw.r(anim.n(), size);
 		c.restore();
 	};
 }

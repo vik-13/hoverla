@@ -1,6 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = 1;
-	const RUNNING_SPEED = 5;
+	const RUNNING_SPEED = 3;
+	const START = 900;
 	const g = {
 		stand: [
 			[[[0,1,0,11,12,13,12,0],"#ffffff","",1],[[5,18,4,26,6,34],"#ffffff","",0],[[5,37,7,43,7,51],"#ffffff","",0],[[6,15,6,26,5,35],"#ffffff","",0],[[6,17,5,25,7,35],"#ffffff","",0],[[4,37,4,44,3,51],"#ffffff","",0]],
@@ -13,7 +14,7 @@ window.character = (() => {
 		down: [
 			[[[0,1,0,11,12,13,12,0],"#ffffff","",1],[[5,18,4,26,6,34],"#ffffff","",0],[[5,37,7,43,7,51],"#ffffff","",0],[[6,15,6,26,5,35],"#ffffff","",0],[[6,17,5,25,7,35],"#ffffff","",0],[[4,37,4,44,3,51],"#ffffff","",0]],
 			[[[18,18,11,24,16,33,25,26],[10,29,11,38,13,46],[4,45,10,48,3,50],[12,29,3,35,3,43],[11,30,14,38,17,46],[2,45,6,48,0,51]]],
-			500,
+			1000,
 			true
 		]
 	};
@@ -24,7 +25,7 @@ window.character = (() => {
 		walkingOut: false,
 		resting: false,
 		restPoints: [
-			[100, 300, 500],
+			[0, 200, 400],
 			[8100, 200, 400],
 			[24100, 200, 400],
 			[36100, 150, 300],
@@ -88,7 +89,7 @@ window.character = (() => {
 	}
 
 	function run() {
-		sprite = new Anim(...g.running, 50);
+		sprite = new Anim(...g.running, 75);
 		speed = RUNNING_SPEED;
 	}
 
@@ -127,12 +128,13 @@ window.character = (() => {
 			}
 		}
 
-		if (avalanche.collision(position, 20)) {
+		if (avalanche.collision(position, 30)) {
 			die(0);
 		}
 	}
 
 	return {
+		isResting: () => restState.resting,
 		isDead: () => death.dead,
 		interaction: (mousePosition) => {
 			if (restState.resting) {
@@ -142,11 +144,13 @@ window.character = (() => {
 			}
 		},
 		i: () => {
-			position = new Vector(800, 0);
+			position = new Vector(START, 0);
 			speed = RUNNING_SPEED;
 		},
 		n: () => {
 			if (!death.dying) {
+				const direction = mountain.getDirection(position.x);
+
 				if (velocity <= speed) {
 					velocity += acceleration;
 					velocity = velocity > speed ? speed : velocity;
@@ -155,14 +159,14 @@ window.character = (() => {
 					velocity = velocity < speed ? speed : velocity;
 				}
 
-				position.add(new Vector(velocity, 0));
+				position.add(new Vector(direction.x * velocity, 0));
 				position.y = mountain.getHeight(position.x);
 				checkForRest();
 
 				collision();
 			} else {
 				if (death.type) {
-					position.add(new Vector(.4, -4));
+					position.add(new Vector(.2, -4));
 				} else {
 					position.add(new Vector(.1, -.1));
 				}

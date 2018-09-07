@@ -1,9 +1,15 @@
 window.mountain = (() => {
+	const gHoles = [
+		[8,4,12,44,0,71,19,86,34,129,57,109,75,76,71,51,87,33,79,0],
+		[8,4,3,59,22,71,14,102,38,109,58,136,77,111,74,69,102,60,79,2],
+		[8,4,27,75,19,122,70,137,93,95,67,52,79,1]
+	];
+
 	const MIN_LENGTH = 100;
 	const MAX_DISTORTION = .08;
 	const trip = [];
 	const CAMPS = [
-		[0, 0, 1000],
+		[-200, 0, 1200],
 		[8000, 3000, 800],
 		[24000, 6500, 800],
 		[36000, 10500, 600],
@@ -12,6 +18,7 @@ window.mountain = (() => {
 	const HIGH = 12500;
 	const LENGTH = 40000;
 	let gradient;
+	let decoration;
 
 	function patch() {
 		const toBeAdded = [];
@@ -90,7 +97,31 @@ window.mountain = (() => {
 		trip.map((path) => {
 			if (path.type === 'empty' && path.start.x > 3000 && path.start.x < CAMPS[3][0]) {
 				if (lastHolePassed > 1 && rFloat(0, 1) <= .1 + (.9 * (lastHolePassed / 100))) {
+					const holeType = rInt(0, 3),
+						startX = gHoles[holeType][0];
+
 					path.type = 'hole';
+					path.g = gHoles[holeType].map((item, index) => {
+						if (!index) {
+							return path.start.x;
+						}
+						if (index === 1) {
+							return path.start.y;
+						}
+						if (index === gHoles[holeType].length - 2) {
+							return path.end.x;
+						}
+						if (index === gHoles[holeType].length - 1) {
+							return path.end.y;
+						}
+						if (!(index % 2)) {
+							return path.start.x + item - startX;
+						}
+						if (index % 2) {
+							return path.start.y - item;
+						}
+						return item;
+					});
 					lastHolePassed = -1;
 				}
 				lastHolePassed++;
@@ -117,6 +148,8 @@ window.mountain = (() => {
 			return item;
 		});
 
+		decoration = new MountainDecoration(trip);
+
 		console.log(trip);
 	}
 
@@ -128,47 +161,70 @@ window.mountain = (() => {
 		i: () => {
 			generate();
 			gradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
-			gradient.addColorStop(0, 'hsl(87, 39%, 36%)');
+			gradient.addColorStop(0, 'hsl(87, 39%, 66%)');
 			gradient.addColorStop(CAMPS[1][1] / HIGH, 'hsl(40, 39%, 36%)');
+			gradient.addColorStop(5000 / HIGH, 'hsl(41, 1%, 50%)');
 			gradient.addColorStop(CAMPS[2][1] / HIGH, 'hsl(181, 79%, 100%)');
 			gradient.addColorStop(CAMPS[3][1] / HIGH, 'hsl(181, 79%, 100%)');
 			gradient.addColorStop(1, 'hsl(181, 79%, 85%)');
 		},
 		n: () => {
-
+			// decoration.n();
 		},
 		r: () => {
-			const cameraPosition = camera.getPosition();
+			// const cameraPosition = camera.getPosition();
 			c.save();
 			c.translate(0, gc.res.y);
 			// c.scale(0.027, 0.027);
+			// c.scale(0.3, .3);
 			c.fillStyle = gradient;
 			let index = 0;
-			while (index < trip.length) {
-				let startX = 0;
-				let startY = 0;
-				let isFinished = false;
-				let isFirst = true;
-				bp();
-				while (!isFinished) {
-					if (isFirst) {
-						startX = trip[index].start.x;
-						startY = trip[index].start.y;
-						m(trip[index].start.x, -trip[index].start.y);
+
+			bp();
+			for (let i = 0; i < trip.length; i++) {
+				if (!i) {
+					m(trip[i].start.x, -trip[i].start.y);
+				} else if (trip[i].type === 'hole') {
+					for (let j = 0; j < trip[i].g.length; j = j+ 2) {
+						l(trip[i].g[j], -trip[i].g[j + 1]);
 					}
-					if (trip[index].type === 'hole' || index === trip.length - 1) {
-						l(trip[index].type === 'hole' ? trip[index].start.x : trip[index].end.x, gc.res.y + 400);
-						l(startX, gc.res.y + 400);
-						c.fill();
-						cp();
-						isFinished = true;
-					} else {
-						l(trip[index].end.x, -trip[index].end.y);
-					}
-					isFirst = false;
-					index++;
+				} else if (i === trip.length - 1) {
+					l(trip[i].end.x, gc.res.y + 400);
+					l(trip[0].start.x, gc.res.y + 400);
+				} else {
+					l(trip[i].end.x, -trip[i].end.y);
 				}
 			}
+			c.fill();
+			cp();
+
+			// while (index < trip.length) {
+			// 	let startX = 0;
+			// 	let startY = 0;
+			// 	let isFinished = false;
+			// 	let isFirst = true;
+			// 	bp();
+			// 	while (!isFinished) {
+			// 		if (isFirst) {
+			// 			startX = trip[index].start.x;
+			// 			startY = trip[index].start.y;
+			// 			m(trip[index].start.x, -trip[index].start.y);
+			// 		}
+			// 		if (trip[index].type === 'hole' || index === trip.length - 1) {
+			// 			l(trip[index].type === 'hole' ? trip[index].start.x : trip[index].end.x, gc.res.y + 400);
+			// 			l(startX, gc.res.y + 400);
+			// 			c.fill();
+			// 			cp();
+			// 			isFinished = true;
+			// 		} else {
+			// 			l(trip[index].end.x, -trip[index].end.y);
+			// 		}
+			// 		isFirst = false;
+			// 		index++;
+			// 	}
+			// }
+
+			decoration.r();
 			c.restore();
 		},
 		getBlock: (x) => {
@@ -198,6 +254,3 @@ window.mountain = (() => {
 		}
 	};
 })();
-
-
-// Trip = {type: 'regular|hole|rocks|stable|unstable|camp', x1, y1, x2, y2};

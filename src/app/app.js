@@ -14,6 +14,11 @@
 
 	function init() {
 		gc.canvas = document.getElementById('app');
+		gc.fpsOut = document.getElementById('fps');
+		gc.fps = {
+			all: 0,
+			count: 0
+		};
 
 		window.c = gc.canvas.getContext('2d');
 		window.l = c.lineTo.bind(c);
@@ -49,6 +54,10 @@
 	}
 
 	function live() {
+		gc.fps.all += Math.floor(1000 / (+new Date() - gc.last));
+		gc.fps.count++;
+		gc.fpsOut.innerHTML = '' + Math.floor((gc.fps.all / gc.fps.count));
+		gc.last = +new Date();
 		n();
 		r();
 		requestAnimationFrame(live);

@@ -15,12 +15,14 @@ window.barricades = (() => {
 			const posX = -camera.getPosition().x + mousePosition.x;
 			const block = mountain.getBlock(posX);
 			const height = mountain.getHeight(posX);
-			if (block.type === 'hole') {
-				brides = [];
-				brides.push(new Bridge(block));
-			} else {
-				panels = [];
-				panels.push(new Panel(new Vector(posX, height), block));
+			if (block.type !== 'camp') {
+				if (block.type === 'hole') {
+					brides = [];
+					brides.push(new Bridge(block));
+				} else {
+					panels = [];
+					panels.push(new Panel(new Vector(posX, height), block));
+				}
 			}
 		},
 		i: () => {
