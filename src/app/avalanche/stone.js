@@ -1,10 +1,11 @@
 function Stone() {
 	const size = [53, 51];
 	const anim = new Anim(
-		[[[0,20,12,3,25,17,16,29],"","#635f62",1],[[25,17,38,0,54,18,45,23],"","#635f62",1],[[45,23,26,40,22,51,48,42],"","#635f62",1],[[25,17,16,28,27,40,46,23],"","#a3a2a5",1],[[25,17,12,2,38,0],"","#697375",1],[[17,29,0,20,0,36,22,51,27,40],"","#697375",1],[[45,22,54,18,48,42],"","#687676",1]],
+		[[[0,20,12,3,25,17,16,29],"#635f62","#635f62",1],[[25,17,38,0,54,18,45,23],"#635f62","#635f62",1],[[45,23,26,40,22,51,48,42],"#635f62","#635f62",1],[[25,17,16,28,27,40,46,23],"#a3a2a5","#a3a2a5",1],[[25,17,12,2,38,0],"#697375","#697375",1],[[17,29,0,20,0,36,22,51,27,40],"#697375","#697375",1],[[45,22,54,18,48,42],"#687676","#687676",1]],
 		[],
 		200
 	);
+	let alpha = 1;
 	let angle = 0;
 	let aAcceleration = .01;
 	let radius = 25;
@@ -44,6 +45,10 @@ function Stone() {
 		death.startDying = +new Date();
 		death.dead = false;
 		death.dying = true;
+
+		if (!type) {
+			anim.break(velocity);
+		}
 	}
 
 	function checkDying() {
@@ -88,19 +93,34 @@ function Stone() {
 			}
 
 			collision(velocity);
-		} else {
 
+			aAcceleration = aAcceleration <= 0 ? 0 : aAcceleration - .001;
+			angle -= aAcceleration;
+		} else {
+			if (!death.type) {
+				alpha -= 0.01;
+				alpha = alpha < 0 ? 0 : alpha;
+			} else {
+				let acc = velocity.get().normalize().mult(-0.017);
+				acc.add(gc.gravity.get().mult(MASS));
+
+				velocity.add(acc);
+				position.add(velocity);
+			}
 		}
 		checkDying();
-
-		aAcceleration = aAcceleration <= 0 ? 0 : aAcceleration - .001;
-		angle -= aAcceleration;
 	};
 
 	this.r = () => {
 		c.save();
 		c.translate(position.x, gc.res.y - position.y);
 		c.rotate(angle);
+		// c.scale(3, 3);
+		c.globalAlpha = alpha;
+		// c.lineWidth = 5;
+		// c.lineJoin = "miter";
+		// c.lineJoin = "round";
+		// c.lineJoin = "bevel";
 		draw.r(anim.n(), size);
 		c.restore();
 	};

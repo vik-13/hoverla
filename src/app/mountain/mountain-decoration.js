@@ -18,7 +18,7 @@ function MountainDecoration(trip) {
 	generate();
 
 	function generate() {
-		trip.forEach((item) => {
+		trip.filter((item, index) => item.type !== 'hole' && trip[index + 1] && trip[index + 1].type !== 'hole').forEach((item, index) => {
 			let count = rInt(1, 5);
 			for (let i = 0; i < count; i++) {
 				let g = rInt(0, gList.length);
@@ -28,7 +28,7 @@ function MountainDecoration(trip) {
 					rotate: rFloat(0, Math.PI * 2),
 					position: new Vector(
 						rInt(item.start.x, item.end.x),
-						rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + 700)
+						rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + 600)
 					),
 					anim: new Anim(gList[g], [])
 				});

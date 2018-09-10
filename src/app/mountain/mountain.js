@@ -98,7 +98,8 @@ window.mountain = (() => {
 			if (path.type === 'empty' && path.start.x > 3000 && path.start.x < CAMPS[3][0]) {
 				if (lastHolePassed > 1 && rFloat(0, 1) <= .1 + (.9 * (lastHolePassed / 100))) {
 					const holeType = rInt(0, 3),
-						startX = gHoles[holeType][0];
+						startX = gHoles[holeType][0],
+						depth = rFloat(1, 3);
 
 					path.type = 'hole';
 					path.g = gHoles[holeType].map((item, index) => {
@@ -118,7 +119,7 @@ window.mountain = (() => {
 							return path.start.x + item - startX;
 						}
 						if (index % 2) {
-							return path.start.y - item;
+							return path.start.y - (item * 2);
 						}
 						return item;
 					});
@@ -160,16 +161,17 @@ window.mountain = (() => {
 	return {
 		i: () => {
 			generate();
-			gradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
-			gradient.addColorStop(0, 'hsl(87, 39%, 66%)');
-			gradient.addColorStop(CAMPS[1][1] / HIGH, 'hsl(40, 39%, 36%)');
-			gradient.addColorStop(5000 / HIGH, 'hsl(41, 1%, 50%)');
-			gradient.addColorStop(CAMPS[2][1] / HIGH, 'hsl(181, 79%, 100%)');
-			gradient.addColorStop(CAMPS[3][1] / HIGH, 'hsl(181, 79%, 100%)');
-			gradient.addColorStop(1, 'hsl(181, 79%, 85%)');
 		},
 		n: () => {
 			// decoration.n();
+			gradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
+			gradient.addColorStop(0, color.get('g1'));
+			gradient.addColorStop(2500 / HIGH, color.get('g2'));
+			gradient.addColorStop(3300 / HIGH, color.get('g3'));
+			gradient.addColorStop(5000 / HIGH, color.get('g3'));
+			gradient.addColorStop(6500 / HIGH, color.get('g4'));
+			gradient.addColorStop(10500 / HIGH, color.get('g4'));
+			gradient.addColorStop(1, color.get('g5'));
 		},
 		r: () => {
 			// const cameraPosition = camera.getPosition();
@@ -177,52 +179,30 @@ window.mountain = (() => {
 			c.translate(0, gc.res.y);
 			// c.scale(0.027, 0.027);
 			// c.scale(0.3, .3);
-			c.fillStyle = gradient;
-			let index = 0;
+			c.lineWidth = 10;
+			c.lineJoin = 'round';
+			c.strokeStyle = gradient;
+			c.fillStyle = 'brown';
 
 			bp();
 			for (let i = 0; i < trip.length; i++) {
 				if (!i) {
 					m(trip[i].start.x, -trip[i].start.y);
-				} else if (trip[i].type === 'hole') {
+				}
+				if (trip[i].type === 'hole') {
 					for (let j = 0; j < trip[i].g.length; j = j+ 2) {
 						l(trip[i].g[j], -trip[i].g[j + 1]);
 					}
 				} else if (i === trip.length - 1) {
-					l(trip[i].end.x, gc.res.y + 400);
-					l(trip[0].start.x, gc.res.y + 400);
+					l(trip[i].end.x, 1400);
+					l(trip[0].start.x, 1400);
 				} else {
 					l(trip[i].end.x, -trip[i].end.y);
 				}
 			}
 			c.fill();
+			c.stroke();
 			cp();
-
-			// while (index < trip.length) {
-			// 	let startX = 0;
-			// 	let startY = 0;
-			// 	let isFinished = false;
-			// 	let isFirst = true;
-			// 	bp();
-			// 	while (!isFinished) {
-			// 		if (isFirst) {
-			// 			startX = trip[index].start.x;
-			// 			startY = trip[index].start.y;
-			// 			m(trip[index].start.x, -trip[index].start.y);
-			// 		}
-			// 		if (trip[index].type === 'hole' || index === trip.length - 1) {
-			// 			l(trip[index].type === 'hole' ? trip[index].start.x : trip[index].end.x, gc.res.y + 400);
-			// 			l(startX, gc.res.y + 400);
-			// 			c.fill();
-			// 			cp();
-			// 			isFinished = true;
-			// 		} else {
-			// 			l(trip[index].end.x, -trip[index].end.y);
-			// 		}
-			// 		isFirst = false;
-			// 		index++;
-			// 	}
-			// }
 
 			decoration.r();
 			c.restore();

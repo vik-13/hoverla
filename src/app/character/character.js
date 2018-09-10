@@ -1,7 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = 1;
-	const RUNNING_SPEED = 3;
-	const START = 900;
+	const RUNNING_SPEED = 5;
+	const START = 0;
 	const g = {
 		stand: [
 			[[[0,1,0,11,12,13,12,0],"#ffffff","",1],[[5,18,4,26,6,34],"#ffffff","",0],[[5,37,7,43,7,51],"#ffffff","",0],[[6,15,6,26,5,35],"#ffffff","",0],[[6,17,5,25,7,35],"#ffffff","",0],[[4,37,4,44,3,51],"#ffffff","",0]],
@@ -25,7 +25,7 @@ window.character = (() => {
 		walkingOut: false,
 		resting: false,
 		restPoints: [
-			[0, 200, 400],
+			[0, 400, 600],
 			[8100, 200, 400],
 			[24100, 200, 400],
 			[36100, 150, 300],
@@ -38,7 +38,7 @@ window.character = (() => {
 	let acceleration = .1;
 
 	let position;
-	const b = [25, 45];
+	const b = [25, 53];
 	const death = {
 		DYING_TIME: 3000,
 		type: 0, // 0 - by rock; 1 - fallingDawn; 2? - By cold on the top of the mountain;
