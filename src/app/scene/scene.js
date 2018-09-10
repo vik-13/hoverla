@@ -1,6 +1,4 @@
 window.scene =(() => {
-	let tree;
-	let campfire;
 
 	return {
 		interaction: (mousePosition) => {
@@ -12,8 +10,6 @@ window.scene =(() => {
 		i: () => {
 			sun.i();
 			camera.i();
-			campfire = new Campfire();
-			tree = new Tree();
 			mountain.i();
 			character.i();
 			avalanche.i();
@@ -27,8 +23,8 @@ window.scene =(() => {
 			sun.n();
 
 			if (!character.isDead()) {
-				// campfire.n();
 				character.n();
+				particles.n();
 				mountain.n();
 
 				objects.n();
@@ -52,20 +48,20 @@ window.scene =(() => {
 			c.save();
 			c.translate(camera.getPosition().x, camera.getPosition().y);
 
+			objects.r(false);
+
 			mountain.r();
 
-			// campfire.r();
-
-			objects.r();
-
 			character.r();
+			particles.r();
 
 			// avalanche.r();
 
 			barricades.r();
 
 			// bushes.r();
-			// tree.r();
+
+			objects.r(true);
 
 			c.restore();
 

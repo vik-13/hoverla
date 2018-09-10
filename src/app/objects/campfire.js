@@ -42,7 +42,7 @@ function Fire(type) {
 
 	this.r = () => {
 		c.save();
-		c.fillStyle = type ? 'hsl(' + ((50 * .8) - (50 * opacity)) + ', 70%, 50%)' : '#444444';
+		c.fillStyle = type ? 'hsl(' + ((50 * .8) - (50 * opacity)) + ', 70%, 50%)' : color.get('smoke');
 		c.translate(position.x, position.y);
 		c.rotate(angle);
 		bp();
@@ -52,10 +52,10 @@ function Fire(type) {
 	};
 }
 
-function Campfire() {
+function Campfire(position) {
 	let fires = [];
 	let stones = new Anim(
-		[[[9,0,5,0,2,2,0,8,6,13,12,11,15,4],"#000","#67756e",1],[[38,1,32,1,28,5,28,12,35,12,40,11,41,6],"#000","#67756e",1],[[18,2,12,6,13,12,19,13,21,9,22,3],"#000","\t#687676",1],[[29,1,21,2,18,6,21,12,28,12,31,7],"#000000","#697375",1],[[17,10,22,10,24,12,20,14,15,13],"#000000","\t#687676",1]],
+		[[[9,0,5,0,2,2,0,8,6,13,12,11,15,4],"#000","#67756e",1],[[38,1,32,1,28,5,28,12,35,12,40,11,41,6],"#000","#67756e",1],[[18,2,12,6,13,12,19,13,21,9,22,3],"#000","#687676",1],[[29,1,21,2,18,6,21,12,28,12,31,7],"#000000","#697375",1],[[17,10,22,10,24,12,20,14,15,13],"#000000","#687676",1]],
 		[]
 	);
 
@@ -67,18 +67,20 @@ function Campfire() {
 		setTimeout(() => {fires.push(new Fire(false));}, 500 + (i * 50));
 	}
 
+	this.front = false;
+
 	this.n = () => {
 		fires.forEach((fire) => fire.n());
 	};
 
 	this.r = () => {
 		c.save();
-		c.translate(380, gc.res.y - 10);
+		c.translate(position.x, gc.res.y - position.y - 10);
 		c.save();
-		c.translate(20, 5);
 		c.scale(.2, .2);
 		fires.forEach((fire) => fire.r());
 		c.restore();
+		c.translate(-20, -5);
 		draw.r(stones.n());
 		c.restore();
 	};

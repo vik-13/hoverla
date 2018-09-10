@@ -1,3 +1,33 @@
-function Particle(position, velocity, mass, r1, r2, c1, c2, time) {
+function Particle(mass, r, p, v, lifeTime, cc) {
+	this.isActive = true;
+	let position = p.get();
+	let velocity = v.get();
+	let acceleration = new Vector();
+	const startTime = +new Date();
 
+	this.n = () => {
+		acceleration.add(velocity.get().normalize().mult(0.001));
+		acceleration.add(gc.gravity.get().mult(mass));
+
+		velocity.add(acceleration);
+		position.add(velocity);
+		acceleration.mult(0);
+
+		if (+new Date() - startTime >= lifeTime) {
+			this.isActive = false;
+		}
+	};
+
+	this.r = () => {
+		const opacity = 1 - ((+new Date() - startTime) / lifeTime);
+		c.save();
+		c.translate(position.x, gc.res.y - position.y);
+		c.globalAlpha = opacity >= 0 ? opacity : 0;
+		bp();
+		c.fillStyle = color.get(cc) || cc;
+		c.rect(-(r / 2), -(r / 2), r * 2, r * 2);
+		c.fill();
+		cp();
+		c.restore();
+	};
 }

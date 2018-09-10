@@ -16,7 +16,6 @@ window.camera = (() => {
 			direction.y *= .05;
 
 			position.add(direction);
-			// position = new Vector(p.x, p.y);
 			outPosition = new Vector(-position.x + 200, position.y - 100);
 			view.start = new Vector(position.x, 0);
 			view.end = new Vector(position.x + gc.res.x, 0);

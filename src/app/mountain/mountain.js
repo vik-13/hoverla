@@ -17,7 +17,7 @@ window.mountain = (() => {
 	const FINAL = [44000, 10000];
 	const HIGH = 12500;
 	const LENGTH = 40000;
-	let gradient;
+	let strokeGradient, fillGradient;
 	let decoration;
 
 	function patch() {
@@ -164,25 +164,33 @@ window.mountain = (() => {
 		},
 		n: () => {
 			// decoration.n();
-			gradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
-			gradient.addColorStop(0, color.get('g1'));
-			gradient.addColorStop(2500 / HIGH, color.get('g2'));
-			gradient.addColorStop(3300 / HIGH, color.get('g3'));
-			gradient.addColorStop(5000 / HIGH, color.get('g3'));
-			gradient.addColorStop(6500 / HIGH, color.get('g4'));
-			gradient.addColorStop(10500 / HIGH, color.get('g4'));
-			gradient.addColorStop(1, color.get('g5'));
+			strokeGradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
+			strokeGradient.addColorStop(0, color.get('g1'));
+			strokeGradient.addColorStop(2500 / HIGH, color.get('g2'));
+			strokeGradient.addColorStop(3300 / HIGH, color.get('g3'));
+			strokeGradient.addColorStop(5000 / HIGH, color.get('g3'));
+			strokeGradient.addColorStop(6500 / HIGH, color.get('g4'));
+			strokeGradient.addColorStop(10500 / HIGH, color.get('g4'));
+			strokeGradient.addColorStop(1, color.get('g5'));
+
+			fillGradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
+			fillGradient.addColorStop(0, color.get('gf1'));
+			fillGradient.addColorStop(2500 / HIGH, color.get('gf2'));
+			fillGradient.addColorStop(3300 / HIGH, color.get('gf3'));
+			fillGradient.addColorStop(5000 / HIGH, color.get('gf3'));
+			fillGradient.addColorStop(6500 / HIGH, color.get('gf4'));
+			fillGradient.addColorStop(10500 / HIGH, color.get('gf4'));
+			fillGradient.addColorStop(1, color.get('gf5'));
 		},
 		r: () => {
 			// const cameraPosition = camera.getPosition();
 			c.save();
 			c.translate(0, gc.res.y);
 			// c.scale(0.027, 0.027);
-			// c.scale(0.3, .3);
 			c.lineWidth = 10;
 			c.lineJoin = 'round';
-			c.strokeStyle = gradient;
-			c.fillStyle = 'brown';
+			c.strokeStyle = strokeGradient;
+			c.fillStyle = fillGradient;
 
 			bp();
 			for (let i = 0; i < trip.length; i++) {

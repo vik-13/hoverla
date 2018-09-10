@@ -11,9 +11,6 @@ function Vector(x, y) {
 	this.angle = (vector) => {
 		return (typeof vector === 'undefined') ? Math.atan2(this.y, this.x) :
 			Math.atan2(vector.y - this.y, vector.x - this.x);
-
-		// return (typeof vector === 'undefined') ? Math.atan2(this.y, this.x) :
-		// 	Math.atan2(vector.y, vector.x) - Math.atan2(this.y, this.x);
 	};
 
 	this.apply = (vector) => {
