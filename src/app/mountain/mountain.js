@@ -1,8 +1,11 @@
 window.mountain = (() => {
 	const gHoles = [
-		[8,4,12,44,0,71,19,86,34,129,57,109,75,76,71,51,87,33,79,0],
-		[8,4,3,59,22,71,14,102,38,109,58,136,77,111,74,69,102,60,79,2],
-		[8,4,27,75,19,122,70,137,93,95,67,52,79,1]
+		[48,4,15,43,37,90,59,86,73,129,97,109,114,76,166,75,150,33,119,0],
+		[48,4,2,67,28,118,54,102,78,109,97,136,117,111,187,98,141,60,118,2],
+		[48,4,0,43,58,122,110,137,133,95,198,96,119,1]
+		// [8,4,12,44,0,71,19,86,34,129,57,109,75,76,71,51,87,33,79,0],
+		// [8,4,3,59,22,71,14,102,38,109,58,136,77,111,74,69,102,60,79,2],
+		// [8,4,27,75,19,122,70,137,93,95,67,52,79,1]
 	];
 
 	const MIN_LENGTH = 100;
@@ -183,7 +186,6 @@ window.mountain = (() => {
 			fillGradient.addColorStop(1, color.get('gf5'));
 		},
 		r: () => {
-			// const cameraPosition = camera.getPosition();
 			c.save();
 			c.translate(0, gc.res.y);
 			// c.scale(0.027, 0.027);
@@ -193,21 +195,24 @@ window.mountain = (() => {
 			c.fillStyle = fillGradient;
 
 			bp();
-			for (let i = 0; i < trip.length; i++) {
-				if (!i) {
-					m(trip[i].start.x, -trip[i].start.y);
-				}
-				if (trip[i].type === 'hole') {
-					for (let j = 0; j < trip[i].g.length; j = j+ 2) {
-						l(trip[i].g[j], -trip[i].g[j + 1]);
+			trip
+				.filter((item) => item.end.x >= camera.getView().start.x && item.start.x <= camera.getView().end.x)
+				.forEach((item, i, filteredTrips) => {
+					if (!i) {
+						m(item.start.x, -item.start.y);
 					}
-				} else if (i === trip.length - 1) {
-					l(trip[i].end.x, 1400);
-					l(trip[0].start.x, 1400);
-				} else {
-					l(trip[i].end.x, -trip[i].end.y);
-				}
-			}
+					if (item.type === 'hole') {
+						for (let j = 0; j < item.g.length; j = j+ 2) {
+							l(item.g[j], -item.g[j + 1]);
+						}
+					} else {
+						l(item.end.x, -item.end.y);
+					}
+					if (i === filteredTrips.length - 1) {
+						l(item.end.x, 1400);
+						l(trip[0].start.x, 1400);
+					}
+				});
 			c.fill();
 			c.stroke();
 			cp();

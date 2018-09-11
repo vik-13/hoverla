@@ -8,6 +8,8 @@ function Stone() {
 	let alpha = 1;
 	let angle = 0;
 	let aAcceleration = .01;
+	let scale = 1;
+
 	let radius = 25;
 	const MASS = .3;
 	const SPEED_LIMIT = 10;
@@ -45,10 +47,6 @@ function Stone() {
 		death.startDying = +new Date();
 		death.dead = false;
 		death.dying = true;
-
-		if (!type) {
-			anim.break(velocity);
-		}
 	}
 
 	function checkDying() {
@@ -101,11 +99,12 @@ function Stone() {
 				alpha -= 0.01;
 				alpha = alpha < 0 ? 0 : alpha;
 			} else {
-				let acc = velocity.get().normalize().mult(-0.017);
-				acc.add(gc.gravity.get().mult(MASS));
+				scale -= .02;
+				scale = scale < 0 ? 0 : scale;
 
-				velocity.add(acc);
-				position.add(velocity);
+				let acc = new Vector(-.7, -2);
+
+				position.add(acc);
 			}
 		}
 		checkDying();
@@ -115,7 +114,7 @@ function Stone() {
 		c.save();
 		c.translate(position.x, gc.res.y - position.y);
 		c.rotate(angle);
-		// c.scale(3, 3);
+		c.scale(scale, scale);
 		c.globalAlpha = alpha;
 		// c.lineWidth = 5;
 		// c.lineJoin = "miter";

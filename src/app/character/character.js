@@ -1,7 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = 1;
-	const RUNNING_SPEED = 2.5;
-	const START = 0;
+	const RUNNING_SPEED = 5;
+	const START = 800;
 	let gList = {
 		running: [
 			[[[14,14,8,18,7,27],"chTopL","",0],[[15,33,19,41,23,48],"chBottomL","",0],[[16,8,16,24,14,33],"chTopC","",0],[[13,11,12,30,4,30,0,17,3,6],"","back",1],[[16,15,21,23,28,19],"chTopR","",0],[[14,33,8,41,1,44],"chBottomR","",0],[[24,7,19,8,13,4,14,0],"","skin",1],[[9,4,20,15,26,11,22,7,19,8,13,4,14,0],"","hair",1],[[16,2,16,4,17,4],"","#000",1]],
@@ -10,6 +10,18 @@ window.character = (() => {
 		sitting: [
 			[[[14,14,8,18,7,27],"chTopL","",0],[[15,33,19,41,23,48],"chBottomL","",0],[[16,8,16,24,14,33],"chTopC","",0],[[13,11,12,30,4,30,0,17,3,6],"","back",1],[[16,15,21,23,28,19],"chTopR","",0],[[14,33,8,41,1,44],"chBottomR","",0],[[24,7,19,8,13,4,14,0],"","skin",1],[[9,4,20,15,26,11,22,7,19,8,13,4,14,0],"","hair",1],[[16,2,16,4,17,4],"","#000",1]],
 			[[[15,18,14,25,21,31],[8,37,17,40,16,49],[18,13,12,30,7,36],[16,15,7,32,0,29,1,15,8,6],[17,18,16,25,23,31],[7,38,16,40,13,49],[25,16,21,14,19,8,22,5],[16,5,18,20,24,21,24,16,21,14,19,8,23,5],[22,9,21,9,22,11]],[[9,20,9,27,16,33],[7,39,17,40,15,49],[10,14,10,31,8,39],[7,17,6,36,-2,37,-6,23,-3,12],[9,20,12,27,19,32],[7,41,16,41,13,49],[18,17,13,16,9,10,12,7],[6,8,11,23,17,21,16,16,13,16,9,10,12,7],[13,10,12,11,13,12]]],
+			500,
+			true
+		],
+		falling: [
+			[[[15,16,16,24,22,30],"chTopL","",0],[[15,33,19,41,23,48],"chBottomL","",0],[[16,8,16,25,14,33],"chTopC","",0],[[13,12,12,31,4,31,0,17,3,7],"","back",1],[[14,33,8,41,0,44],"chBottomR","",0],[[23,10,18,9,15,3,18,0],"","skin",1],[[12,1,16,16,23,15,22,10,18,9,15,3,18,0],"","hair",1],[[19,3,17,4,19,5],"","#000",1],[[16,16,17,23,23,29],"chTopR","",0]],
+			[[[15,16,18,24,27,25],[15,33,24,34,31,39],0,0,[14,33,16,41,5,41],0,0,0,[16,16,24,16,32,12]],[[15,16,23,17,32,16],[15,33,24,34,18,43],0,0,[14,33,24,34,20,43],0,0,0,[16,16,25,12,32,6]],[[15,16,19,10,19,2],[15,34,14,43,12,50],0,0,[14,33,15,43,11,51],0,0,0,[16,16,21,10,22,2]]],
+			500,
+			true
+		],
+		hiding: [
+			[[[14,16,14,23,21,29],"chTopL","",0],[[15,33,17,42,17,49],"chBottomL","",0],[[16,8,16,25,14,33],"chTopC","",0],[[13,11,12,30,4,31,0,17,3,6],"","back",1],[[13,33,13,42,11,50],"chBottomR","",0],[[24,10,19,9,16,3,19,0],"","skin",1],[[13,1,17,16,23,15,22,10,19,9,16,3,19,0],"","hair",1],[[20,3,18,4,20,5],"","#000",1],[[16,16,17,24,24,27],"chTopR","",0]],
+			[[[36,31,41,38,47,44],[19,39,25,50,14,50],[40,30,25,33,18,39],[35,28,18,36,14,29,24,19,35,16],[18,40,22,50,11,48],[45,36,42,32,44,26,49,25],[43,22,36,36,42,39,44,35,42,32,44,26,49,25],[46,27,45,28,46,29],[36,31,39,38,43,45]]],
 			500,
 			true
 		]
@@ -30,13 +42,15 @@ window.character = (() => {
 
 	let sprite;
 	let speed;
-	let velocity = 0;
+	let velocity = new Vector();
 	let acceleration = .1;
+	let angle = 0;
+	let scale = 2;
 
 	let position;
 	const b = [28, 53];
 	const death = {
-		DYING_TIME: 3000,
+		DYING_TIME: 2000,
 		type: 0, // 0 - by rock; 1 - fallingDawn; 2? - By cold on the top of the mountain;
 		dead: false,
 		dying: false,
@@ -72,7 +86,11 @@ window.character = (() => {
 		death.startDying = +new Date();
 		death.dead = false;
 		death.dying = true;
-		stop();
+		fall();
+
+		if (!type) {
+			velocity.apply(new Vector(-3, 3));
+		}
 	}
 
 	function checkDying() {
@@ -95,13 +113,25 @@ window.character = (() => {
 	function sitDown() {
 		sprite = new Anim(...gList.sitting);
 		speed = 0;
-		velocity = 0;
+		velocity.apply(new Vector());
+	}
+
+	function hiding() {
+		sprite = new Anim(...gList.hiding);
+		speed = 0;
+		velocity.apply(new Vector());
 	}
 
 	function stop() {
 		sprite = new Anim(...gList.running);
 		speed = 0;
-		velocity = 0;
+		velocity.apply(new Vector());
+	}
+
+	function fall() {
+		sprite = new Anim(...gList.falling);
+		speed = 0;
+		velocity.apply(new Vector());
 	}
 
 	function collision() {
@@ -113,7 +143,7 @@ window.character = (() => {
 		if (barricades.checkPanels(position)) {
 			if (!covered) {
 				covered = true;
-				sitDown();
+				hiding();
 			}
 		} else {
 			if (covered) {
@@ -146,28 +176,40 @@ window.character = (() => {
 			if (!death.dying) {
 				const direction = mountain.getDirection(position.x);
 
-				if (velocity <= speed) {
-					velocity += acceleration;
-					velocity = velocity > speed ? speed : velocity;
+				if (velocity.x <= speed) {
+					velocity.x += acceleration;
+					velocity.x = velocity.x > speed ? speed : velocity.x;
 				} else {
-					velocity -= acceleration;
-					velocity = velocity < speed ? speed : velocity;
+					velocity.x -= acceleration;
+					velocity.x = velocity.x < speed ? speed : velocity.x;
 				}
 
 				if (speed > WALKING_SPEED) {
 					particles.addRunning(position);
 				}
 
-				position.add(new Vector(direction.x * velocity, 0));
+				position.add(new Vector(direction.x * velocity.x, 0));
 				position.y = mountain.getHeight(position.x);
 				checkForRest();
 
 				collision();
 			} else {
 				if (death.type) {
-					position.add(new Vector(.2, -4));
+					position.add(new Vector(.3, -.5));
+					angle += .02;
+					scale -= .01;
 				} else {
-					position.add(new Vector(.1, -.1));
+					let acc = velocity.get().normalize().mult(-0.017);
+					acc.add(gc.gravity.get().mult(.1));
+
+					velocity.add(acc);
+					position.add(velocity);
+
+					if (position.y < mountain.getHeight(position.x)) {
+						position.y = mountain.getHeight(position.x);
+					}
+
+					angle -= .02;
 				}
 			}
 
@@ -176,6 +218,8 @@ window.character = (() => {
 		r: () => {
 			c.save();
 			c.translate(position.x, gc.res.y - position.y - (b[1] / 2));
+			c.rotate(angle);
+			c.scale(scale > 1 ? 1 : scale, scale > 1 ? 1 : scale);
 			draw.r(sprite.n(), b, 6);
 			c.restore();
 		},

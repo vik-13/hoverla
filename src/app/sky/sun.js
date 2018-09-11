@@ -1,7 +1,7 @@
 window.sun = (() => {
 	let position,
 		// angle = Math.PI,
-		angle = 4,
+		angle = 4.8,
 		speed = .001,
 		time = {
 			day: true,
