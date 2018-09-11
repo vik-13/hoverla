@@ -32,7 +32,11 @@ window.color = (() => {
 		tree2_1: ['hsl(154, 43%, c%)', 31],
 		tree2_2: ['hsl(127, 34%, c%)', 30],
 		tree2_3: ['hsl(109, 29%, c%)', 36],
-		walking: ['hsl(224, 4%, c%)', 75]
+		walking: ['hsl(224, 4%, c%)', 75],
+		rock1: ['hsl(260, 2%, c%)', 75],
+		rock2: ['hsl(260, 2%, c%)', 65],
+		rock3: ['hsl(260, 2%, c%)', 55],
+		rock4: ['hsl(260, 2%, c%)', 45]
 	};
 
 	return {

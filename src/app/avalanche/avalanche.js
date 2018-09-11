@@ -1,6 +1,7 @@
 window.avalanche = (() => {
 	let list = [];
-	let last;
+	let lastAdded, lastCalled;
+	const interval = 500;
 
 	return {
 		collision: (pos, r) => {
@@ -13,15 +14,17 @@ window.avalanche = (() => {
 			return isCollided;
 		},
 		i: () => {
-			last = +new Date();
-			// list.push(new Stone());
+			lastCalled = +new Date();
+			lastAdded = +new Date();
 		},
 		n: () => {
-			const diff = +new Date() - last;
-
-			if (diff >= 3000) {
-				list.push(new Stone());
-				last = + new Date();
+			if (+new Date() - lastCalled >= interval) {
+				const diff = +new Date() - lastAdded;
+				if (diff >= 4000 || rFloat(0, 1) < (.1 + .4 * (diff / 4000))) {
+					list.push(new Stone());
+					lastAdded = + new Date();
+				}
+				lastCalled = +new Date();
 			}
 
 			list = list.filter((item) => item.isActive());

@@ -1,7 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = 1;
 	const RUNNING_SPEED = 5;
-	const START = 800;
+	const START = 0;
 	let gList = {
 		running: [
 			[[[14,14,8,18,7,27],"chTopL","",0],[[15,33,19,41,23,48],"chBottomL","",0],[[16,8,16,24,14,33],"chTopC","",0],[[13,11,12,30,4,30,0,17,3,6],"","back",1],[[16,15,21,23,28,19],"chTopR","",0],[[14,33,8,41,1,44],"chBottomR","",0],[[24,7,19,8,13,4,14,0],"","skin",1],[[9,4,20,15,26,11,22,7,19,8,13,4,14,0],"","hair",1],[[16,2,16,4,17,4],"","#000",1]],
@@ -48,7 +48,7 @@ window.character = (() => {
 	let scale = 1.5;
 
 	let position;
-	const b = [28, 53];
+	const b = [28, 48];
 	const death = {
 		DYING_TIME: 2000,
 		type: 0, // 0 - by rock; 1 - fallingDawn; 2? - By cold on the top of the mountain;
@@ -137,7 +137,7 @@ window.character = (() => {
 	function collision() {
 		const block = mountain.getBlock(position.x);
 		if (block.type === 'hole' && !barricades.checkBridges(block.id)) {
-			die(1);
+			// die(1);
 		}
 
 		if (barricades.checkPanels(position)) {
@@ -152,9 +152,9 @@ window.character = (() => {
 			}
 		}
 
-		if (avalanche.collision(position, 30)) {
-			die(0);
-		}
+		// if (avalanche.collision(position, 30)) {
+		// 	die(0);
+		// }
 	}
 
 	return {
@@ -173,6 +173,9 @@ window.character = (() => {
 			run();
 		},
 		n: () => {
+			if (death.dead) {
+				return false;
+			}
 			if (!death.dying) {
 				const direction = mountain.getDirection(position.x);
 

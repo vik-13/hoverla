@@ -22,18 +22,16 @@ window.scene =(() => {
 		n: () => {
 			sun.n();
 
-			if (!character.isDead()) {
-				character.n();
-				particles.n();
-				mountain.n();
+			character.n();
+			particles.n();
+			mountain.n();
 
-				objects.n();
+			objects.n();
 
-				avalanche.n();
-				barricades.n();
+			avalanche.n();
+			barricades.n();
 
-				camera.n(character.getPosition());
-			}
+			camera.n(character.getPosition());
 		},
 		r: () => {
 			let bg = c.createLinearGradient(0, 0, 0, gc.res.y);

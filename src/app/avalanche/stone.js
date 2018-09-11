@@ -1,20 +1,31 @@
-function Stone() {
-	const size = [53, 51];
-	const anim = new Anim(
-		[[[0,20,12,3,25,17,16,29],"#635f62","#635f62",1],[[25,17,38,0,54,18,45,23],"#635f62","#635f62",1],[[45,23,26,40,22,51,48,42],"#635f62","#635f62",1],[[25,17,16,28,27,40,46,23],"#a3a2a5","#a3a2a5",1],[[25,17,12,2,38,0],"#697375","#697375",1],[[17,29,0,20,0,36,22,51,27,40],"#697375","#697375",1],[[45,22,54,18,48,42],"#687676","#687676",1]],
-		[]
-	);
+function Stone(t) {
+	const gList = [
+		[[[28,0,34,20,27,30,24,27,10,35,0,21,12,6],"","rock1",1],[[28,0,49,8,45,41,34,20],"","rock2",1],[[49,8,54,22,45,40],"","rock3",1],[[0,21,7,44,14,48,11,35],"","rock2",1],[[11,35,14,47,36,47,27,30,24,27],"","rock4",1],[[27,30,34,20,45,40,36,47],"","rock2",1]],
+		[[[0,20,12,3,25,17,16,29],"","rock4",1],[[25,17,38,0,54,18,45,23],"","rock2",1],[[45,23,26,40,22,51,48,42],"","rock3",1],[[25,17,16,28,27,40,46,23],"","rock1",1],[[25,17,12,2,38,0],"","rock4",1],[[17,29,0,20,0,36,22,51,27,40],"","rock2",1],[[45,22,54,18,48,42],"","rock3",1]]
+	];
+	const gListSize = [
+		[54, 48],
+		[53, 51]
+	];
+
+	const type = typeof t !== 'undefined' ? t : rInt(0, gList.length);
+	const MASS = rFloat(.2, .6);
+	let scale = 1;
+
+	const radius = (gListSize[type][0] + gListSize[type][1]) / 4;
+	const anim = new Anim(gList[type], []);
+
 	let alpha = 1;
 	let angle = 0;
 	let aAcceleration = .01;
-	let scale = 1;
 
-	let radius = 25;
-	const MASS = .3;
-	const SPEED_LIMIT = 10;
-	const height = mountain.getHeight(gc.res.x - camera.getPosition().x);
-	const position = new Vector(gc.res.x - camera.getPosition().x, height);
-	let velocity = new Vector(-2, 2);
+	const SPEED_LIMIT = 15;
+	const x = gc.res.x - camera.getPosition().x + 100;
+	const height = mountain.getHeight(x);
+	const mAngle = mountain.getAngle(x);
+	const position = new Vector(x, height);
+	let velocity = new Vector(rFloat(-3, -2), rFloat(1, 2));
+	// .mult(((Math.PI / 2) - mAngle) / (Math.PI / 2))
 
 	const death = {
 		DYING_TIME: 1000,
@@ -94,17 +105,20 @@ function Stone() {
 			aAcceleration = aAcceleration <= 0 ? 0 : aAcceleration - .001;
 			angle -= aAcceleration;
 		} else {
-			if (!death.type) {
+			if (!death.type) { // collision
 				alpha -= 0.01;
-				alpha = alpha < 0 ? 0 : alpha;
-			} else {
+			} else if (death.type === 1) { // falling
+				alpha -= 0.01;
 				scale -= .02;
 				scale = scale < 0 ? 0 : scale;
 
 				let acc = new Vector(-.7, -2);
 
 				position.add(acc);
+			} else { // stopped
+				alpha -= 0.01;
 			}
+			alpha = alpha < 0 ? 0 : alpha;
 		}
 		checkDying();
 	};
@@ -115,7 +129,7 @@ function Stone() {
 		c.rotate(angle);
 		c.scale(scale, scale);
 		c.globalAlpha = alpha;
-		draw.r(anim.n(), size);
+		draw.r(anim.n(), gListSize[type]);
 		c.restore();
 	};
 }

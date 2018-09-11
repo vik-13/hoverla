@@ -231,7 +231,7 @@ window.mountain = (() => {
 			const filteredMap = search(x);
 			if (filteredMap[0]) {
 				let diffX = (x - filteredMap[0].start.x) / (filteredMap[0].end.x - filteredMap[0].start.x);
-				let diffY = filteredMap[0].start.y + ((filteredMap[0].end.y - filteredMap[0].start.y) * diffX);
+				let diffY = (filteredMap[0].start.y + 5) + (((filteredMap[0].end.y + 5) - (filteredMap[0].start.y + 5)) * diffX);
 				return diffY;
 			} else {
 				return -1;

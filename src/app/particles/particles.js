@@ -10,7 +10,7 @@ window.particles = (function() {
 			if (+new Date() - runningLast < 400) {
 				return false;
 			}
-			const amount = 5;
+			const amount = 10;
 			const r = 5;
 			let i, distance, angle;
 			for (i = 0; i < amount; i++) {
