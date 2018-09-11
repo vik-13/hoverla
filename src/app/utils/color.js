@@ -36,7 +36,8 @@ window.color = (() => {
 		rock1: ['hsl(260, 2%, c%)', 75],
 		rock2: ['hsl(260, 2%, c%)', 65],
 		rock3: ['hsl(260, 2%, c%)', 55],
-		rock4: ['hsl(260, 2%, c%)', 45]
+		rock4: ['hsl(260, 2%, c%)', 45],
+		snow: ['hsl(181, 5%, c%)', 90],
 	};
 
 	return {

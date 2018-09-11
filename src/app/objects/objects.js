@@ -8,6 +8,10 @@ window.objects = (() => {
 		list.push(new Bench(new Vector(396, 0), false));
 		list.push(new Bench(new Vector(504, 0), false));
 
+		list.push(new Tree(new Vector(-50, 0), 0));
+		list.push(new Tree(new Vector(-100, 0), 1));
+		list.push(new Tree(new Vector(-130, 0), 1));
+
 		list.push(new Tree(new Vector(100, 0), 0));
 		list.push(new Tree(new Vector(140, 0), 1));
 		list.push(new Tree(new Vector(200, 0), 1));

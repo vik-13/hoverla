@@ -33,6 +33,8 @@ window.scene =(() => {
 			barricades.n();
 
 			camera.n(character.getPosition());
+
+			weather.n();
 		},
 		r: () => {
 			let bg = c.createLinearGradient(0, 0, 0, gc.res.y);
@@ -62,8 +64,9 @@ window.scene =(() => {
 			// bushes.r();
 
 			objects.r(true);
-
 			c.restore();
+
+			weather.r();
 
 			c.save();
 			c.globalAlpha = .2 * gc.sunset;
