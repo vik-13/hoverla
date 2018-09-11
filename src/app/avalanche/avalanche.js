@@ -3,6 +3,33 @@ window.avalanche = (() => {
 	let lastAdded, lastCalled;
 	const interval = 500;
 
+	function check() {
+		const x = character.getPosition().x;
+
+		return (x > 1100 && x < (8000 - gc.res.x)) ||
+			(x > 8900 && x < (24000 - gc.res.x)) ||
+			(x > 24900 && x < (36000 - gc.res.x)) ||
+			(x > 36700 && x < (40000 - gc.res.x));
+	}
+
+	function getType() {
+		const x = character.getPosition().x;
+		return x < 24900 ? 0 : x < 36700 ? 1 : 2;
+	}
+
+	function add() {
+		if (check()) {
+			if (+new Date() - lastCalled >= interval) {
+				const diff = +new Date() - lastAdded;
+				if (diff >= 4000 || rFloat(0, 1) < (.1 + .4 * (diff / 4000))) {
+					list.push(new Stone());
+					lastAdded = + new Date();
+				}
+				lastCalled = +new Date();
+			}
+		}
+	}
+
 	return {
 		collision: (pos, r) => {
 			let isCollided = false;
@@ -18,14 +45,7 @@ window.avalanche = (() => {
 			lastAdded = +new Date();
 		},
 		n: () => {
-			if (+new Date() - lastCalled >= interval) {
-				const diff = +new Date() - lastAdded;
-				if (diff >= 4000 || rFloat(0, 1) < (.1 + .4 * (diff / 4000))) {
-					list.push(new Stone());
-					lastAdded = + new Date();
-				}
-				lastCalled = +new Date();
-			}
+			add();
 
 			list = list.filter((item) => item.isActive());
 

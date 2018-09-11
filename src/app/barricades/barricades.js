@@ -8,7 +8,7 @@ window.barricades = (() => {
 			return !!bridge.length;
 		},
 		checkPanels: (position) => {
-			const panel = panels.filter((item) => position.distance(item.position) <= 20);
+			const panel = panels.filter((item) => position.distance(item.position) <= 10);
 			return !!panel.length;
 		},
 		add: (mousePosition) => {

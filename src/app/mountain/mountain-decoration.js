@@ -35,7 +35,7 @@ function MountainDecoration(trip) {
 						rotate: rFloat(0, Math.PI * 2),
 						position: new Vector(
 							rInt(item.start.x, item.end.x),
-							rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + 600)
+							rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + gc.res.y * .8)
 						),
 						anim: new Anim(gList[g], [])
 					});

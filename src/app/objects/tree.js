@@ -10,19 +10,23 @@ function Tree(position, t, front) {
 		]
 	];
 	const gListSizes = [
-		[52, 74],
-		[101, 151]
+		[52, 70],
+		[101, 145]
 	];
+	const side = rInt(0, 2) ? -1 : 1;
+	const scale = rFloat(.8, 1.2);
 	const type = typeof t !== 'undefined' ? t : rInt(0, gList.length);
 	const anim = new Anim(...gList[type], rInt(2800, 5000));
 
 	this.front = typeof front !== 'undefined' ? front : !rInt(0, 2);
+	this.position = position;
 
 	this.n = () => {};
 
 	this.r = () => {
 		c.save();
-		c.translate(position.x, gc.res.y - position.y - gListSizes[type][1] / 2);
+		c.translate(position.x, gc.res.y - position.y - (gListSizes[type][1] * scale) / 2);
+		c.scale(side * scale, scale);
 		draw.r(anim.n(), gListSizes[type]);
 		c.restore();
 	};

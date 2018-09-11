@@ -11,11 +11,7 @@ window.particles = (function() {
 				return false;
 			}
 			const amount = 10;
-			const r = 5;
-			let i, distance, angle;
-			for (i = 0; i < amount; i++) {
-				distance = r * Math.random();
-				angle = 2 * Math.PI * Math.random();
+			for (let i = 0; i < amount; i++) {
 				list.push(
 					new Particle(
 						rFloat(.1, .15),
@@ -28,6 +24,22 @@ window.particles = (function() {
 				);
 			}
 			runningLast = +new Date();
+		},
+		addRockRolling: (position, magnitude) => {
+			const amount = 3 * magnitude;
+			const r = 5;
+			for (let i = 0; i < amount; i++) {
+				list.push(
+					new Particle(
+						rFloat(.1, .15),
+						rInt(3, 10),
+						position.get(),
+						new Vector(rFloat(0, 2), rFloat(1.5, 1.8)),
+						500,
+						'walking'
+					)
+				);
+			}
 		},
 		n: () => {
 			list = list.filter(function(particle) {

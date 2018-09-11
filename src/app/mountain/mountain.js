@@ -3,9 +3,6 @@ window.mountain = (() => {
 		[48,4,15,43,37,90,59,86,73,129,97,109,114,76,166,75,150,33,119,0],
 		[48,4,2,67,28,118,54,102,78,109,97,136,117,111,187,98,141,60,118,2],
 		[48,4,0,43,58,122,110,137,133,95,198,96,119,1]
-		// [8,4,12,44,0,71,19,86,34,129,57,109,75,76,71,51,87,33,79,0],
-		// [8,4,3,59,22,71,14,102,38,109,58,136,77,111,74,69,102,60,79,2],
-		// [8,4,27,75,19,122,70,137,93,95,67,52,79,1]
 	];
 
 	const MIN_LENGTH = 100;
@@ -153,8 +150,6 @@ window.mountain = (() => {
 		});
 
 		decoration = new MountainDecoration(trip);
-
-		console.log(trip);
 	}
 
 	function search(x) {
@@ -244,6 +239,7 @@ window.mountain = (() => {
 		getDirection: (x) => {
 			const filteredMap = search(x);
 			return filteredMap[0] ? filteredMap[0].direction.get() : new Vector();
-		}
+		},
+		getTrip: () => trip
 	};
 })();

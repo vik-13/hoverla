@@ -63,11 +63,12 @@ function Campfire(position) {
 		setTimeout(() => {fires.push(new Fire(true));}, i * 10);
 	}
 
-	for(let i = 0; i < 300; i++) {
+	for(let i = 0; i < 150; i++) {
 		setTimeout(() => {fires.push(new Fire(false));}, 500 + (i * 50));
 	}
 
 	this.front = false;
+	this.position = position;
 
 	this.n = () => {
 		fires.forEach((fire) => fire.n());

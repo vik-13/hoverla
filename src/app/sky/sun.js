@@ -28,9 +28,9 @@ window.sun = (() => {
 			time.part = Math.cos(angle);
 			time.day = (angle >= Math.PI) && angle <= 2 * Math.PI;
 			position.apply(new Vector(gc.res.x / 2 + (gc.res.x / 2) * Math.cos(angle),
-				650 + 400 * Math.sin(angle)));
+				gc.res.y + (gc.res.y * .7) * Math.sin(angle)));
 			moonPosition = new Vector(gc.res.x / 2 + (gc.res.x / 2) * Math.cos(angle + Math.PI),
-				650 + 400 * Math.sin(angle + Math.PI));
+				gc.res.y + (gc.res.y * .7) * Math.sin(angle + Math.PI));
 		},
 		r: () => {
 			c.save();

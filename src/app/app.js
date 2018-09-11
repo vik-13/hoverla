@@ -8,6 +8,8 @@
 // Залишки динозаврів й інші речі в середині гори;
 
 // Графіка - Декілька варіантів куль, ялинок, кущів, трави.
+// Підправити розмір мосту;
+// Можливо покращити графіку для ретіна екранів
 
 
 (() => {
@@ -15,11 +17,11 @@
 	window.rFloat = (from, to) => from + (Math.random() * (to - from));
 
 	window.gc = {
+		// res: {x: 640, y: 360},
+		// res: {x: 960, y: 540},
 		res: {x: 1280, y: 720},
-		interaction: {
-			touched: false,
-			position: new Vector()
-		},
+		// res: {x: 1280 * 30, y: 720 * 30},
+		mousePosition: new Vector(),
 		start: +new Date(),
 		last: +new Date()
 	};
@@ -47,6 +49,10 @@
 
 		gc.canvas.addEventListener('click', (e) => {
 			scene.interaction(new Vector(e.offsetX, e.offsetY).div(gc.originalRatio));
+		});
+
+		gc.canvas.addEventListener('mousemove', (e) => {
+			gc.mousePosition = new Vector(e.offsetX, e.offsetY);
 		});
 	}
 

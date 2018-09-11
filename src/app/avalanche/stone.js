@@ -19,7 +19,7 @@ function Stone(t) {
 	let angle = 0;
 	let aAcceleration = .01;
 
-	const SPEED_LIMIT = 15;
+	const SPEED_LIMIT = 10;
 	const x = gc.res.x - camera.getPosition().x + 100;
 	const height = mountain.getHeight(x);
 	const mAngle = mountain.getAngle(x);
@@ -48,6 +48,7 @@ function Stone(t) {
 				const reflection = velocity.get().sub(normal.get().mult(velocity.get().dot(normal)));
 				aAcceleration = (velocity.mag() / (2 * radius * Math.PI)) * (2 * Math.PI);
 				velocity.apply(reflection);
+				particles.addRockRolling(position.get().apply(new Vector(position.x, position.y - (gListSize[type][1] / 2))), velocity.mag());
 			}
 		}
 	}

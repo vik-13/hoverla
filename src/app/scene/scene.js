@@ -1,5 +1,4 @@
 window.scene =(() => {
-
 	return {
 		interaction: (mousePosition) => {
 			if (!character.isResting()) {
@@ -8,6 +7,7 @@ window.scene =(() => {
 			character.interaction(mousePosition);
 		},
 		i: () => {
+			sky.i();
 			sun.i();
 			camera.i();
 			mountain.i();
@@ -20,6 +20,7 @@ window.scene =(() => {
 			barricades.i();
 		},
 		n: () => {
+			sky.n();
 			sun.n();
 
 			character.n();
@@ -41,6 +42,7 @@ window.scene =(() => {
 			// c.fillStyle = '#000000';
 			c.fillRect(0, 0, gc.res.x, gc.res.y);
 
+			sky.r();
 			sun.r();
 
 			c.save();

@@ -9,6 +9,7 @@ function House(position, t, front) {
 	const anim = new Anim(gList[type], []);
 
 	this.front = typeof front !== 'undefined' ? front : !rInt(0, 2);
+	this.position = position;
 
 	this.n = () => {
 
