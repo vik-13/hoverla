@@ -167,6 +167,13 @@ window.mountain = (() => {
 		},
 		n: () => {
 			// decoration.n();
+		},
+		r: () => {
+			c.save();
+			c.translate(0, gc.res.y);
+			// c.scale(0.027, 0.027);
+			c.lineWidth = 10;
+			c.lineJoin = 'round';
 			strokeGradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
 			strokeGradient.addColorStop(0, color.get('g1'));
 			strokeGradient.addColorStop(2500 / HIGH, color.get('g2'));
@@ -175,6 +182,7 @@ window.mountain = (() => {
 			strokeGradient.addColorStop(6500 / HIGH, color.get('g4'));
 			strokeGradient.addColorStop(10500 / HIGH, color.get('g4'));
 			strokeGradient.addColorStop(1, color.get('g5'));
+			c.strokeStyle = strokeGradient;
 
 			fillGradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);
 			fillGradient.addColorStop(0, color.get('gf1'));
@@ -184,14 +192,6 @@ window.mountain = (() => {
 			fillGradient.addColorStop(6500 / HIGH, color.get('gf4'));
 			fillGradient.addColorStop(10500 / HIGH, color.get('gf4'));
 			fillGradient.addColorStop(1, color.get('gf5'));
-		},
-		r: () => {
-			c.save();
-			c.translate(0, gc.res.y);
-			// c.scale(0.027, 0.027);
-			c.lineWidth = 10;
-			c.lineJoin = 'round';
-			c.strokeStyle = strokeGradient;
 			c.fillStyle = fillGradient;
 
 			bp();

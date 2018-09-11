@@ -29,7 +29,7 @@ window.scene =(() => {
 
 				objects.n();
 
-				// avalanche.n();
+				avalanche.n();
 				barricades.n();
 
 				camera.n(character.getPosition());
@@ -55,7 +55,7 @@ window.scene =(() => {
 			character.r();
 			particles.r();
 
-			// avalanche.r();
+			avalanche.r();
 
 			barricades.r();
 

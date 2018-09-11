@@ -18,23 +18,29 @@ function MountainDecoration(trip) {
 	generate();
 
 	function generate() {
-		trip.filter((item, index) => item.type !== 'hole' && trip[index + 1] && trip[index + 1].type !== 'hole').forEach((item, index) => {
-			let count = rInt(1, 5);
-			for (let i = 0; i < count; i++) {
-				let g = rInt(0, gList.length);
-				list.push({
-					g: g,
-					scale: rFloat(.4, 2),
-					rotate: rFloat(0, Math.PI * 2),
-					position: new Vector(
-						rInt(item.start.x, item.end.x),
-						rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + 600)
-					),
-					anim: new Anim(gList[g], [])
-				});
-			}
-		});
-		console.log(list);
+		trip
+			.filter((item, index) => {
+				return !index ||
+					item.type !== 'hole' &&
+					trip[index - 1] && trip[index - 1].type !== 'hole' &&
+					trip[index + 1] && trip[index + 1].type !== 'hole'
+			})
+			.forEach((item) => {
+				let count = rInt(1, 5);
+				for (let i = 0; i < count; i++) {
+					let g = rInt(0, gList.length);
+					list.push({
+						g: g,
+						scale: rFloat(.4, 2),
+						rotate: rFloat(0, Math.PI * 2),
+						position: new Vector(
+							rInt(item.start.x, item.end.x),
+							rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + 600)
+						),
+						anim: new Anim(gList[g], [])
+					});
+				}
+			});
 	}
 
 	this.n = () => {

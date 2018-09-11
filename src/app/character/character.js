@@ -45,7 +45,7 @@ window.character = (() => {
 	let velocity = new Vector();
 	let acceleration = .1;
 	let angle = 0;
-	let scale = 2;
+	let scale = 1.5;
 
 	let position;
 	const b = [28, 53];
@@ -195,9 +195,9 @@ window.character = (() => {
 				collision();
 			} else {
 				if (death.type) {
-					position.add(new Vector(.3, -.5));
+					position.add(new Vector(.3, -1));
 					angle += .02;
-					scale -= .01;
+					scale = scale - .013 < 0 ? 0 : scale - .013;
 				} else {
 					let acc = velocity.get().normalize().mult(-0.017);
 					acc.add(gc.gravity.get().mult(.1));
@@ -208,7 +208,6 @@ window.character = (() => {
 					if (position.y < mountain.getHeight(position.x)) {
 						position.y = mountain.getHeight(position.x);
 					}
-
 					angle -= .02;
 				}
 			}

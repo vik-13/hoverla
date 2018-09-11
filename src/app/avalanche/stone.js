@@ -2,8 +2,7 @@ function Stone() {
 	const size = [53, 51];
 	const anim = new Anim(
 		[[[0,20,12,3,25,17,16,29],"#635f62","#635f62",1],[[25,17,38,0,54,18,45,23],"#635f62","#635f62",1],[[45,23,26,40,22,51,48,42],"#635f62","#635f62",1],[[25,17,16,28,27,40,46,23],"#a3a2a5","#a3a2a5",1],[[25,17,12,2,38,0],"#697375","#697375",1],[[17,29,0,20,0,36,22,51,27,40],"#697375","#697375",1],[[45,22,54,18,48,42],"#687676","#687676",1]],
-		[],
-		200
+		[]
 	);
 	let alpha = 1;
 	let angle = 0;
@@ -116,10 +115,6 @@ function Stone() {
 		c.rotate(angle);
 		c.scale(scale, scale);
 		c.globalAlpha = alpha;
-		// c.lineWidth = 5;
-		// c.lineJoin = "miter";
-		// c.lineJoin = "round";
-		// c.lineJoin = "bevel";
 		draw.r(anim.n(), size);
 		c.restore();
 	};
