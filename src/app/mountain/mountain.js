@@ -166,7 +166,6 @@ window.mountain = (() => {
 		r: () => {
 			c.save();
 			c.translate(0, gc.res.y);
-			// c.scale(0.027, 0.027);
 			c.lineWidth = 10;
 			c.lineJoin = 'round';
 			strokeGradient = c.createLinearGradient(LENGTH / 2, 0, LENGTH / 2, -HIGH);

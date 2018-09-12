@@ -4,8 +4,7 @@ window.weather = (function() {
 	let duration = 5000;
 
 	function calcNext() {
-		let next = 2;
-		// let next = rInt(0, 2);
+		let next = rInt(0, 3);
 		start = +new Date();
 		list = list.filter(function(item) {
 			return item;

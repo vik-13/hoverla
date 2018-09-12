@@ -1,7 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = .5;
 	const RUNNING_SPEED = 2;
-	const START = 10;
+	const START = 900;
 	let gList = {
 		walking: [
 			[[[15,16,10,20,8,28],"chTopL","",0],[[14,33,17,40,21,48],"chBottomL","",0],[[16,8,16,25,14,33],"chTopC","",0],[[13,12,12,31,4,31,0,17,3,7],"","back",1],[[14,33,10,41,5,47],"chBottomR","",0],[[23,10,18,9,15,4,17,0],"","skin",1],[[11,2,17,16,23,15,22,10,18,9,15,3,17,0],"","hair",1],[[18,3,17,4,19,4],"","#000",1],[[16,16,19,23,24,28],"chTopR","",0]],
@@ -32,6 +32,7 @@ window.character = (() => {
 	};
 
 	const restState = {
+		finish: false,
 		canRun: true,
 		walkingIn: false,
 		walkingOut: false,
@@ -52,7 +53,7 @@ window.character = (() => {
 	let scale = 1.5;
 
 	let position;
-	const b = [28, 45];
+	const b = [28, 48];
 	const death = {
 		DYING_TIME: 2000,
 		type: 0, // 0 - by rock; 1 - fallingDawn; 2? - By cold on the top of the mountain;
@@ -127,7 +128,7 @@ window.character = (() => {
 	}
 
 	function stop() {
-		sprite = new Anim(...gList.running);
+		sprite = new Anim(...gList.hiding);
 		speed = 0;
 		velocity.apply(new Vector());
 	}
@@ -180,7 +181,7 @@ window.character = (() => {
 			if (death.dead) {
 				return false;
 			}
-			if (!death.dying) {
+			if (!death.dying && !restState.finish) {
 				const direction = mountain.getDirection(position.x);
 
 				if (velocity.x <= speed) {
@@ -197,10 +198,15 @@ window.character = (() => {
 
 				position.add(new Vector(direction.x * velocity.x, 0));
 				position.y = mountain.getHeight(position.x);
+
+				if (position.x > 40000) {
+					restState.finish = true;
+					stop();
+				}
 				checkForRest();
 
 				collision();
-			} else {
+			} else if (death.dying) {
 				if (death.type) {
 					position.add(new Vector(.3, -1));
 					angle += .02;
@@ -217,6 +223,8 @@ window.character = (() => {
 					}
 					angle -= .02;
 				}
+			} else {
+				// TODO: FINISHING
 			}
 
 			checkDying();
