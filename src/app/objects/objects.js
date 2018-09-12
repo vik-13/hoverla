@@ -22,11 +22,18 @@ window.objects = (() => {
 			const trip = mountain.getTrip();
 			trip.filter((item) => item.type !== 'hole' && item.type !== 'camp').forEach((item) => {
 				if (item.start.x > 1000 && item.start.x < 36000) {
-					const count = Math.floor(rFloat(0, 1 + 2 * (1 - (item.start.x / 36000))));
-					for (let i = 0; i < count; i++) {
+					const countTree = Math.floor(rFloat(0, 1 + 2 * (1 - (item.start.x / 36000))));
+					for (let i = 0; i < countTree; i++) {
 						const x = rInt(item.start.x, item.end.x);
 						const y = (item.start.y + 5) + (((item.end.y + 5) - (item.start.y + 5)) * ((x - item.start.x) / (item.end.x - item.start.x)));
 						list.push(new Tree(new Vector(x, y)));
+					}
+				}
+				if (item.start.x > 1000 && item.start.x < 10000) {
+					if (!rInt(0, 5)) {
+						const x = rInt(item.start.x, item.end.x);
+						const y = (item.start.y + 5) + (((item.end.y + 5) - (item.start.y + 5)) * ((x - item.start.x) / (item.end.x - item.start.x)));
+						list.push(new Bush(new Vector(x, y)));
 					}
 				}
 			});

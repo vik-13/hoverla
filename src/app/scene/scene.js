@@ -15,8 +15,6 @@ window.scene =(() => {
 			avalanche.i();
 
 			objects.i();
-
-			bushes.i();
 		},
 		n: () => {
 			sky.n();
@@ -61,8 +59,6 @@ window.scene =(() => {
 				avalanche.r();
 
 				barricades.r();
-
-				// bushes.r();
 
 				objects.r(true);
 				c.restore();
