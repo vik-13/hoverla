@@ -17,13 +17,14 @@
 	window.rFloat = (from, to) => from + (Math.random() * (to - from));
 
 	window.gc = {
-		// res: {x: 640, y: 360},
-		// res: {x: 960, y: 540},
 		res: {x: 1280, y: 720},
-		// res: {x: 1280 * 3, y: 720 * 3},
 		mousePosition: new Vector(),
 		start: +new Date(),
-		last: +new Date()
+		last: +new Date(),
+		paused: true,
+		byDeath: false,
+		night: 0,
+		sunset: 0
 	};
 
 	function init() {
@@ -48,7 +49,12 @@
 		live();
 
 		gc.canvas.addEventListener('click', (e) => {
-			scene.interaction(new Vector(e.offsetX, e.offsetY).div(gc.originalRatio));
+			if (gc.paused) {
+				gc.paused = false;
+				gc.byDeath = false;
+			} else {
+				scene.interaction(new Vector(e.offsetX, e.offsetY).div(gc.originalRatio));
+			}
 		});
 
 		gc.canvas.addEventListener('mousemove', (e) => {
@@ -83,10 +89,23 @@
 	}
 
 	function n() {
-		gc.night = !sun.getTime().day && Math.abs(sun.getTime().part) >= .8 ?
-			((1 - Math.abs(sun.getTime().part)) / .2) : !sun.getTime().day ? 1 : 0;
-		gc.sunset = Math.abs(sun.getTime().part) > .8 ? ((Math.abs(sun.getTime().part) - .8) / .2) : 0;
+		if (!gc.paused) {
+			gc.night = !sun.getTime().day && Math.abs(sun.getTime().part) >= .8 ?
+				((1 - Math.abs(sun.getTime().part)) / .2) : !sun.getTime().day ? 1 : 0;
+			gc.sunset = Math.abs(sun.getTime().part) > .8 ? ((Math.abs(sun.getTime().part) - .8) / .2) : 0;
+		}
 		scene.n();
+		if (character.isDead()) {
+			gc.night = 0;
+			gc.sunset = 0;
+			gc.byDeath = true;
+			gc.paused = true;
+			character.reset();
+			camera.reset();
+			particles.reset();
+			barricades.reset();
+			avalanche.reset();
+		}
 	}
 
 	function r() {

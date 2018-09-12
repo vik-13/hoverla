@@ -1,7 +1,7 @@
 window.character = (() => {
 	const WALKING_SPEED = .5;
 	const RUNNING_SPEED = 2;
-	const START = 900;
+	const START = 200;
 	let gList = {
 		walking: [
 			[[[15,16,10,20,8,28],"chTopL","",0],[[14,33,17,40,21,48],"chBottomL","",0],[[16,8,16,25,14,33],"chTopC","",0],[[13,12,12,31,4,31,0,17,3,7],"","back",1],[[14,33,10,41,5,47],"chBottomR","",0],[[23,10,18,9,15,4,17,0],"","skin",1],[[11,2,17,16,23,15,22,10,18,9,15,3,17,0],"","hair",1],[[18,3,17,4,19,4],"","#000",1],[[16,16,19,23,24,28],"chTopR","",0]],
@@ -28,6 +28,11 @@ window.character = (() => {
 			[[[20,23,19,30,23,40],[18,40,15,50,5,50],[20,15,20,32,18,40],[17,20,16,39,8,39,4,25,7,15],[19,40,27,42,23,50],[28,16,23,15,19,10,21,6],[15,9,22,22,28,20,27,16,23,15,19,10,21,6],[22,9,21,10,22,11],[20,22,21,30,25,37]]],
 			300,
 			true
+		],
+		drinking: [
+			[[[15,20,15,28,21,34],"chTopL","",0],[[14,39,23,41,20,49],"chBottomL","",0],[[15,15,15,31,14,40],"chTopC","",0],[[13,17,12,36,4,36,0,23,3,12],"","back",1],[[14,41,22,42,19,49],"chBottomR","",0],[[23,16,19,16,15,10,18,7],"","skin",1],[[11,8,17,23,24,21,22,16,19,16,15,10,18,7],"","hair",1],[[19,9,17,11,19,11],"","#000",1],[[15,20,18,27,25,33],"chTopR","",0],[[25,27,26,35,30,35,31,27],"","cup",1]],
+			[[0,0,0,0,0,0,0,0,[16,21,21,25,29,21],[27,17,31,24,35,22,32,14]],[0,0,0,0,0,[24,14,19,15,14,11,15,7],[10,11,20,22,25,19,22,15,19,15,14,11,15,7],[17,10,16,11,18,11],[15,20,22,22,28,16],[24,15,31,19,33,16,28,10]],[0,0,0,0,0,0,0,0,[16,20,21,25,29,23],[28,19,30,26,34,25,33,17]],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
+			1500
 		]
 	};
 
@@ -38,10 +43,10 @@ window.character = (() => {
 		walkingOut: false,
 		resting: false,
 		restPoints: [
-			[0, 400, 600],
-			[8100, 200, 400],
-			[24100, 200, 400],
-			[36100, 150, 300],
+			[0, 400, 450],
+			[8100, 200, 250],
+			[24100, 200, 250],
+			[36100, 150, 200],
 		]
 	};
 
@@ -76,6 +81,11 @@ window.character = (() => {
 				restState.resting = true;
 				restState.walkingIn = false;
 				sitDown();
+				setTimeout(() => {
+					if (restState.resting) {
+						drink();
+					}
+				}, 1500)
 			}
 		} else if (restState.walkingOut) {
 			const isCamp = restState.restPoints.filter((item) => position.x >= item[0] + item[2] && position.x < item[0] + item[2] + 200);
@@ -139,6 +149,13 @@ window.character = (() => {
 		velocity.apply(new Vector());
 	}
 
+	function drink() {
+		sprite = new Anim(...gList.drinking);
+		speed = 0;
+		velocity.apply(new Vector());
+		position.add(new Vector(-6, 0));
+	}
+
 	function collision() {
 		const block = mountain.getBlock(position.x);
 		if (block.type === 'hole' && !barricades.checkBridges(block.id)) {
@@ -158,14 +175,14 @@ window.character = (() => {
 		}
 
 		if (avalanche.collision(position, 30)) {
-			// die(0);
+			die(0);
 		}
 	}
 
 	return {
 		isResting: () => restState.resting,
 		isDead: () => death.dead,
-		interaction: (mousePosition) => {
+		interaction: () => {
 			if (restState.resting) {
 				restState.resting = false;
 				restState.walkingOut = true;
@@ -173,6 +190,17 @@ window.character = (() => {
 			}
 		},
 		i: () => {
+			position = new Vector(START, 0);
+			speed = RUNNING_SPEED;
+			run();
+		},
+		reset: () => {
+			death.dead = false;
+			death.dying = false;
+			velocity = new Vector();
+			acceleration = .1;
+			angle = 0;
+			scale = 1.5;
 			position = new Vector(START, 0);
 			speed = RUNNING_SPEED;
 			run();
@@ -218,8 +246,8 @@ window.character = (() => {
 					velocity.add(acc);
 					position.add(velocity);
 
-					if (position.y < mountain.getHeight(position.x)) {
-						position.y = mountain.getHeight(position.x);
+					if (position.y < mountain.getHeight(position.x) - 20) {
+						position.y = mountain.getHeight(position.x) - 20;
 					}
 					angle -= .02;
 				}

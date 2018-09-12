@@ -24,11 +24,11 @@ window.color = (() => {
 		benchTop: ['hsl(42, 41%, c%)', 41],
 		benchBottom: ['hsl(42, 41%, c%)', 31],
 		smoke: ['hsl(224, 4%, c%)', 84],
-		tree1Bottom: ['hsl(17, 81%, c%)', 23],
+		tree1Bottom: ['hsl(17, 81%, c%)', 30],
 		tree1_1: ['hsl(154, 43%, c%)', 31],
 		tree1_2: ['hsl(170, 36%, c%)', 35],
 		tree1_3: ['hsl(169, 21%, c%)', 48],
-		tree2Bottom: ['hsl(30, 84%, c%)', 23],
+		tree2Bottom: ['hsl(30, 84%, c%)', 30],
 		tree2_1: ['hsl(154, 43%, c%)', 31],
 		tree2_2: ['hsl(127, 34%, c%)', 30],
 		tree2_3: ['hsl(109, 29%, c%)', 36],
@@ -42,7 +42,8 @@ window.color = (() => {
 		brown2: ['hsl(33, 33%, c%)', 55],
 		brown3: ['hsl(39, 58%, c%)', 33],
 		brown4: ['hsl(17, 81%, c%)', 23],
-		brown5: ['hsl(52, 36%, c%)', 52]
+		brown5: ['hsl(52, 36%, c%)', 52],
+		cup: ['hsl(15, 69%, c%)', 49]
 	};
 
 	return {

@@ -28,7 +28,7 @@ window.objects = (() => {
 			const trip = mountain.getTrip();
 			trip.filter((item) => item.type !== 'hole').forEach((item) => {
 				if (item.start.x > 1000 && item.start.x < 36000) {
-					const count = item.type === 'camp' ? rInt(15, 20) : Math.floor(rFloat(0, 1 + 3 * (1 - (item.start.x / 36000))));
+					const count = item.type === 'camp' ? rInt(15, 20) : Math.floor(rFloat(0, 1 + 2 * (1 - (item.start.x / 36000))));
 					for (let i = 0; i < count; i++) {
 						const x = rInt(item.start.x, item.end.x);
 						const y = (item.start.y + 5) + (((item.end.y + 5) - (item.start.y + 5)) * ((x - item.start.x) / (item.end.x - item.start.x)));
@@ -46,8 +46,13 @@ window.objects = (() => {
 		r: (front) => {
 			list
 				.filter((item) => {
-					return item.position.x >= camera.getView().start.x && item.position.x <= camera.getView().end.x &&
-						(!front && !item.front || front && item.front);
+					if (!gc.paused) {
+						return item.position.x >= camera.getView().start.x && item.position.x <= camera.getView().end.x &&
+							(!front && !item.front || front && item.front);
+					} else {
+						return item.position.x >= camera.getView().start.x && item.position.x <= camera.getView().end.x &&
+							(item instanceof Campfire || item instanceof Bench);
+					}
 				})
 				.forEach((item) => {
 				item.r();

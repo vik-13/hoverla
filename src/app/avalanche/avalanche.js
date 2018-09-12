@@ -44,6 +44,11 @@ window.avalanche = (() => {
 			lastCalled = +new Date();
 			lastAdded = +new Date();
 		},
+		reset: () => {
+			list = [];
+			lastCalled = +new Date();
+			lastAdded = +new Date();
+		},
 		n: () => {
 			add();
 

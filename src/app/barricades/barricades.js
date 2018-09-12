@@ -25,8 +25,9 @@ window.barricades = (() => {
 				}
 			}
 		},
-		i: () => {
-
+		reset: () => {
+			brides = [];
+			panels = [];
 		},
 		n: () => {
 			panels = panels.filter((panel) => panel.isActive());
