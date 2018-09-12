@@ -14,6 +14,9 @@ function Bridge(block) {
 	let stage = 0;
 	let inactiveTimer = 0;
 
+	function die() {
+		particles.dying(position.get().apply(new Vector(position.x, position.y + 20)), ['brown1', 'brown2', 'brown3', 'brown4']);
+	}
 
 	this.getBlockId = () => {
 		return block.id;
@@ -37,11 +40,13 @@ function Bridge(block) {
 		if (avalanche.collision(position, 40)) {
 			active = false;
 			dead = true;
+			die();
 		}
 
 		if (diff >= 3000) {
 			active = false;
 			dead = true;
+			die();
 		} else if (diff >= 2000 && stage <= 0) {
 			stage = 1;
 			inactiveTimer = 10;

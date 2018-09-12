@@ -9,7 +9,7 @@ function Stone(t) {
 	];
 
 	const type = typeof t !== 'undefined' ? t : rInt(0, gList.length);
-	const MASS = rFloat(.2, .6);
+	const MASS = rFloat(.2, .4);
 	let scale = 1;
 
 	const radius = (gListSize[type][0] + gListSize[type][1]) / 4;
@@ -24,8 +24,7 @@ function Stone(t) {
 	const height = mountain.getHeight(x);
 	const mAngle = mountain.getAngle(x);
 	const position = new Vector(x, height);
-	let velocity = new Vector(rFloat(-3, -2), rFloat(1, 2));
-	// .mult(((Math.PI / 2) - mAngle) / (Math.PI / 2))
+	let velocity = new Vector(rFloat(-7, -13), rFloat(7, 13));
 
 	const death = {
 		DYING_TIME: 1000,
@@ -45,7 +44,7 @@ function Stone(t) {
 				die(1);
 			} else {
 				position.y = height + 10;
-				const reflection = velocity.get().sub(normal.get().mult(velocity.get().dot(normal)));
+				const reflection = velocity.get().sub(normal.get().mult(1.5 * velocity.get().dot(normal)));
 				aAcceleration = (velocity.mag() / (2 * radius * Math.PI)) * (2 * Math.PI);
 				velocity.apply(reflection);
 				particles.addRockRolling(position.get().apply(new Vector(position.x, position.y - (gListSize[type][1] / 2))), velocity.mag());
@@ -64,6 +63,9 @@ function Stone(t) {
 		if (death.dying && +new Date() - death.startDying >= death.DYING_TIME) {
 			death.dead = true;
 			death.dying = false;
+			if (death.type === 2) {
+				particles.dying(position.get().apply(new Vector(position.x, position.y + 40)), ['rock1', 'rock2', 'rock3', 'rock4']);
+			}
 		}
 	}
 
@@ -77,7 +79,8 @@ function Stone(t) {
 		}
 		const isCollided = position.distance(pos) <= radius + r;
 		if (isCollided) {
-			die(0);
+			death.dead = true;
+			particles.dying(position.get().apply(new Vector(position.x, position.y + 40)), ['rock1', 'rock2', 'rock3', 'rock4']);
 		}
 		return isCollided;
 	};
@@ -117,7 +120,7 @@ function Stone(t) {
 
 				position.add(acc);
 			} else { // stopped
-				alpha -= 0.01;
+				// alpha -= 0.01;
 			}
 			alpha = alpha < 0 ? 0 : alpha;
 		}

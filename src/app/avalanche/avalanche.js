@@ -21,7 +21,7 @@ window.avalanche = (() => {
 		if (check()) {
 			if (+new Date() - lastCalled >= interval) {
 				const diff = +new Date() - lastAdded;
-				if (diff >= 4000 || rFloat(0, 1) < (.1 + .4 * (diff / 4000))) {
+				if (diff >= 4000 || rFloat(0, 1) < (.1 + .6 * (diff / 4000))) {
 					list.push(new Stone());
 					lastAdded = + new Date();
 				}

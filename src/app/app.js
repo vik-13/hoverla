@@ -20,7 +20,7 @@
 		// res: {x: 640, y: 360},
 		// res: {x: 960, y: 540},
 		res: {x: 1280, y: 720},
-		// res: {x: 1280 * 30, y: 720 * 30},
+		// res: {x: 1280 * 3, y: 720 * 3},
 		mousePosition: new Vector(),
 		start: +new Date(),
 		last: +new Date()

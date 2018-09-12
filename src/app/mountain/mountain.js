@@ -119,7 +119,7 @@ window.mountain = (() => {
 							return path.start.x + item - startX;
 						}
 						if (index % 2) {
-							return path.start.y - (item * 2);
+							return path.start.y - (item * 4);
 						}
 						return item;
 					});

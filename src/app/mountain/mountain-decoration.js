@@ -8,8 +8,8 @@ function MountainDecoration(trip) {
 		[[[0,4,21,29,1,62,25,67,43,68,56,45,51,21,66,10,28,0],"",color1,1]]
 	];
 	let gListSizes = [
-		[76,55],
-		[76,59],
+		[76, 55],
+		[76, 59],
 		[52, 57],
 		[66, 68]
 	];
@@ -35,7 +35,7 @@ function MountainDecoration(trip) {
 						rotate: rFloat(0, Math.PI * 2),
 						position: new Vector(
 							rInt(item.start.x, item.end.x),
-							rInt(Math.min(item.start.y, item.end.y), Math.min(item.start.y, item.end.y) + gc.res.y * .8)
+							rInt(Math.min(item.start.y, item.end.y) - 100, Math.min(item.start.y, item.end.y) - 600)
 						),
 						anim: new Anim(gList[g], [])
 					});
@@ -52,7 +52,7 @@ function MountainDecoration(trip) {
 			.filter((item) => item.position.x >= camera.getView().start.x && item.position.x < camera.getView().end.x)
 			.forEach((item) => {
 			c.save();
-			c.translate(item.position.x, gc.res.y - item.position.y);
+			c.translate(item.position.x, -item.position.y);
 			c.rotate(item.rotate);
 			c.scale(item.scale, item.scale);
 			draw.r(item.anim.n(), gListSizes[item.g]);

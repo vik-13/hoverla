@@ -15,6 +15,10 @@ function Panel(position, block) {
 
 	this.position = position;
 
+	function die() {
+		particles.dying(position.get().apply(new Vector(position.x, position.y + 40)), ['brown1', 'brown2', 'brown3', 'brown4']);
+	}
+
 	this.destroy = () => {
 		active = false;
 		dead = true;
@@ -33,10 +37,12 @@ function Panel(position, block) {
 		if (avalanche.collision(position, 40)) {
 			active = false;
 			dead = true;
+			die();
 		}
 		if (diff >= 3000) {
 			active = false;
 			dead = true;
+			die();
 		} else if (diff >= 2000 && stage <= 0) {
 			stage = 1;
 			inactiveTimer = 10;

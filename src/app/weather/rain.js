@@ -20,7 +20,7 @@ function Rain() {
 			if (Math.random() < possibility) {
 				let newFlake = {
 					active: true,
-					m: .3,
+					m: .6,
 					acceleration: new Vector(),
 					velocity: new Vector(),
 					position: new Vector(rFloat(0, 1.1 * gc.res.x), -50),
