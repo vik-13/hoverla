@@ -1,8 +1,7 @@
 window.sun = (() => {
 	let position,
 		angle = Math.PI,
-		// angle = 4.8,
-		speed = .0007,
+		speed = .0008,
 		time = {
 			day: true,
 			part: Math.cos(angle)
@@ -35,7 +34,6 @@ window.sun = (() => {
 		r: () => {
 			c.save();
 			c.translate(position.x, position.y);
-			c.scale(1, 1);
 			c.fillStyle = "rgb(253, 214, 49)";
 			bp();
 			c.arc(30, 30, 30, 0, Math.PI * 2);
@@ -45,7 +43,6 @@ window.sun = (() => {
 
 			c.save();
 			c.translate(moonPosition.x, moonPosition.y);
-			c.scale(1, 1);
 			c.miterLimit=4;
 			c.fillStyle="#FCFC65";
 			bp();

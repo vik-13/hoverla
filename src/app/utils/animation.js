@@ -48,18 +48,3 @@ function Anim(g, a, s, f) {
 		return latestSlide;
   };
 }
-
-function T(from, to, time, callback) {
-	let start = +new Date(),
-		diffValue = to - from,
-		isFinished = false;
-
-	this.n = () => {
-		const diff = +new Date() - start;
-		if (diff >= time && !isFinished) {
-			isFinished = true;
-			callback && callback();
-		}
-		return isFinished ? to : from + diffValue * (diff / time);
-	};
-}

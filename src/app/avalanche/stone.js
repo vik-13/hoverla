@@ -119,8 +119,6 @@ function Stone(t) {
 				let acc = new Vector(-.7, -2);
 
 				position.add(acc);
-			} else { // stopped
-				// alpha -= 0.01;
 			}
 			alpha = alpha < 0 ? 0 : alpha;
 		}

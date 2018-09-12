@@ -180,6 +180,7 @@ window.character = (() => {
 	}
 
 	return {
+		isFinish: () => restState.finish,
 		isResting: () => restState.resting,
 		isDead: () => death.dead,
 		interaction: () => {
@@ -197,6 +198,7 @@ window.character = (() => {
 		reset: () => {
 			death.dead = false;
 			death.dying = false;
+			restState.finish = false;
 			velocity = new Vector();
 			acceleration = .1;
 			angle = 0;
@@ -251,8 +253,6 @@ window.character = (() => {
 					}
 					angle -= .02;
 				}
-			} else {
-				// TODO: FINISHING
 			}
 
 			checkDying();

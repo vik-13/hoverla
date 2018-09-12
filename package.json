@@ -1,5 +1,5 @@
 {
-  "name": "go-climb",
+  "name": "hoverla",
   "version": "0.0.1",
   "description": "A little game...",
   "main": "index.html",
@@ -12,7 +12,7 @@
     "url": ""
   },
   "keywords": [
-    "climbing, go climb, game"
+    "hoverla, mountain, climbing, game"
   ],
   "author": "Viktor Uhryn",
   "license": "ISC",
