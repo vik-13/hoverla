@@ -73,7 +73,7 @@ function buildStyles() {
 
 function buildZip() {
   return gulp.src(config.release.index + '/**/*')
-    .pipe(zip('go-jump.zip'))
+    .pipe(zip('hoverla.zip'))
     .pipe(gulp.dest(''))
     .pipe(size({
       pretty: false
